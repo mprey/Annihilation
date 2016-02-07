@@ -1,0 +1,56 @@
+############################
+####### ANNIHILATION #######
+#### MADE BY MASON PREY ####
+###########################
+
+# Enter true if you wish to run Annihilation with Bungee Servers
+bungee_mode: false
+
+###########################
+### REGENERATING BLOCKS ###
+###########################
+regen_blocks:
+
+    # Time interval between respawning blocks in long units (keep default if you do not understand)
+    interval: 10
+
+    # List of blocks
+    blocks:
+        # Each category must be uniquely named (any name is fine as long as it is not repeated)
+        coal_ore:
+
+            # Block to be mined
+            type: COAL_ORE
+
+            # Item given either dropped naturally or placed into player's inventory when 'type' is mined
+            # Enter '0' in 'reward_amount' if you want no reward given
+            reward: COAL
+
+            # Number of items that are given of rewards
+            # Enter '0' if you want no reward given
+            reward_amount: 1
+
+            # Delay in seconds between the block regenerating
+            delay: 10
+
+            # (True/false) Specify whether the reward should drop naturally on the block's location or into the player's inventory
+            natural_drop: false
+
+            # Block that replaces the 'type' field when mined
+            place_holder: COBBLESTONE
+
+            # Exp reward for mining the block
+            # Enter 0 if you want to reward
+            exp_reward: 5
+
+            # Sound to be played when the block is mined
+            # Enter 'NONE' if you want no sound to be played
+            sound: ORB_PICKUP
+
+            # Custom effects played when the block is mined
+            # Current list of effects:
+            # - GRAVEL
+            # - NONE
+            effect: NONE
+
+
