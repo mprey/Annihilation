@@ -35,7 +35,7 @@ public class Annihilation extends JavaPlugin {
         this.createRegeneratingBlocksManager();
 
         this.getServer().getPluginManager().registerEvents(new Listener() {
-            //TEST COMMIT
+            //commitnn
             @EventHandler
             public void onBreak(BlockBreakEvent event) {
                 regeneratingBlockManager.handleBlockBreak(event);
