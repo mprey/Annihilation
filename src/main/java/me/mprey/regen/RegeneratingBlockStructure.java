@@ -62,4 +62,8 @@ public class RegeneratingBlockStructure {
     public int getExp() {
         return exp;
     }
+
+    public boolean isValid() {
+        return getType() != null && getReward() != null && getRewardInt() >= 0 && getPlaceholder() != null && getDelay() >= 0 && getEffect() != null && getExp() >=0;
+    }
 }

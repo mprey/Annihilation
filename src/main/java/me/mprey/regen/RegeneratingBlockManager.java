@@ -1,10 +1,8 @@
 package me.mprey.regen;
 
-import com.sun.org.apache.regexp.internal.RE;
 import me.mprey.Annihilation;
-import me.mprey.Utils;
+import me.mprey.util.Utils;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;

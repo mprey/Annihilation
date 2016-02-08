@@ -4,6 +4,7 @@ import me.mprey.regen.RegeneratingBlock;
 import me.mprey.regen.RegeneratingBlockEffect;
 import me.mprey.regen.RegeneratingBlockManager;
 import me.mprey.regen.RegeneratingBlockStructure;
+import me.mprey.util.ConfigUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -34,21 +35,7 @@ public class Annihilation extends JavaPlugin {
 
         this.createRegeneratingBlocksManager();
 
-        this.getServer().getPluginManager().registerEvents(new Listener() {
-            //commitnnt.
-            @EventHandler
-            public void onBreak(BlockBreakEvent event) {
-                regeneratingBlockManager.handleBlockBreak(event);
-            }
 
-            @EventHandler
-            public void onInteract(PlayerInteractEvent event) {
-                if (event.getClickedBlock() != null) {
-                    regeneratingBlockManager.handleInteract(event);
-                }
-            }
-
-        }, this);
     }
 
     public void onDisable() {
@@ -57,30 +44,7 @@ public class Annihilation extends JavaPlugin {
 
     public void createRegeneratingBlocksManager() {
         long interval = this.getConfig().getLong("regen_blocks.interval");
-
-        ArrayList<RegeneratingBlockStructure> structureList = new ArrayList<>();
-
-        if (this.getConfig().isConfigurationSection("regen_blocks.blocks")) {
-            for (String key : this.getConfig().getConfigurationSection("regen_blocks.blocks").getKeys(false)) {
-                try {
-                    Material material = Material.getMaterial(this.getConfig().getString("regen_blocks.blocks." + key + ".type"));
-                    Material reward = Material.getMaterial(this.getConfig().getString("regen_blocks.blocks." + key + ".reward"));
-                    int rewardInt = this.getConfig().getInt("regen_blocks.blocks." + key + ".reward_amount");
-                    long delay = this.getConfig().getInt("regen_blocks.blocks." + key + ".delay") * 20L;
-                    boolean naturalDrop = this.getConfig().getBoolean("regen_blocks.blocks." + key + ".natural_drop");
-                    Material placeholder = Material.getMaterial(this.getConfig().getString("regen_blocks.blocks." + key + ".place_holder"));
-                    int exp = this.getConfig().getInt("regen_blocks.blocks." + key + ".exp_reward");
-                    Sound sound = Sound.valueOf(this.getConfig().getString("regen_blocks.blocks." + key + ".sound").toUpperCase());
-                    RegeneratingBlockEffect effect = RegeneratingBlockEffect.valueOf(this.getConfig().getString("regen_blocks.blocks." + key + ".effect").toUpperCase());
-                    structureList.add(new RegeneratingBlockStructure(material, reward, rewardInt, delay, naturalDrop, placeholder, exp, sound, effect));
-                } catch (Exception e) {
-                    this.getLogger().log(Level.SEVERE, "Error while reading regeneration block section: " + key);
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        this.regeneratingBlockManager = new RegeneratingBlockManager(structureList, interval);
+        this.regeneratingBlockManager = new RegeneratingBlockManager(ConfigUtil.getRegeneratingBlockStructures(this.getConfig(), "regen_blocks.blocks"), interval);
     }
 
     public static Annihilation getInstance() {

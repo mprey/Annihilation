@@ -37,4 +37,8 @@ public enum TeamColor {
         return chatColor;
     }
 
+    public String toString() {
+        return this.name().toLowerCase();
+    }
+
 }
