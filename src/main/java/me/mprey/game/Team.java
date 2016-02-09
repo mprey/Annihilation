@@ -12,26 +12,12 @@ import java.util.Map;
 /**
  * Created by Mason Prey on 2/8/16.
  */
-public class Team implements ConfigurationSerializable {
-
-    private Location[] spawnLocations;
-    private Block enderChest, enderBrewer, enderFurnace;
-    private Nexus nexus;
-    private Region region;
+public class Team {
 
     private List<Player> playerList;
 
     public Team(TeamColor color) {
 
-    }
-
-    @Override
-    public Map<String, Object> serialize() {
-        HashMap<String, Object> map = new HashMap<>();
-
-        map.put("")
-
-        return null;
     }
 
 }

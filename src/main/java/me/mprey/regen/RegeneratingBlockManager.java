@@ -73,7 +73,7 @@ public class RegeneratingBlockManager {
                 addBlock(new RegeneratingBlock(event.getBlock(), event.getBlock().getType(), structure.getPlaceholder(), structure.getDelay()));
                 event.setCancelled(true);
                 if (structure.isNaturalDrop()) {
-                    Utils.dropItem(event.getBlock().getLocation(), structure.getReward(), structure.getRewardInt());
+                    GameUtil.dropItem(event.getBlock().getLocation(), structure.getReward(), structure.getRewardInt());
                 } else event.getPlayer().getInventory().addItem(new ItemStack(structure.getReward(), structure.getRewardInt()));
                 event.getPlayer().giveExp(structure.getExp());
                 event.getPlayer().getLocation().getWorld().playSound(event.getPlayer().getLocation(), structure.getSound(), 1, 1);
