@@ -1,4 +1,4 @@
-package me.mprey.game.map;
+package me.mprey.map;
 
 import org.bukkit.Chunk;
 import org.bukkit.Location;

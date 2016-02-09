@@ -1,4 +1,4 @@
-package me.mprey.game.map;
+package me.mprey.map;
 
 import me.mprey.game.TeamLocation;
 import org.bukkit.Location;
@@ -54,5 +54,9 @@ public class Map {
 
     public Region getMapArea() {
         return mapArea;
+    }
+
+    public boolean equals(Map other) {
+        return name.equals(other);
     }
 }

@@ -1,6 +1,6 @@
 package me.mprey.game;
 
-import me.mprey.game.map.Region;
+import me.mprey.map.Region;
 import org.bukkit.Location;
 
 /**

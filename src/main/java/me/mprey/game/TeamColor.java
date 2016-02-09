@@ -19,7 +19,7 @@ public enum TeamColor {
     private ChatColor chatColor;
     private DyeColor dyeColor;
 
-    private TeamColor(Color color, ChatColor chatColor, DyeColor dyeColor) {
+    TeamColor(Color color, ChatColor chatColor, DyeColor dyeColor) {
         this.color = color;
         this.chatColor = chatColor;
         this.dyeColor = dyeColor;
