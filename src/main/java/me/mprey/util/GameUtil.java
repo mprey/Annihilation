@@ -26,9 +26,8 @@ public class GameUtil {
         }
     }
 
-    public static void dropItem(Location location, Material material, int amount, boolean naturally) {
-        if (!naturally) location.getWorld().dropItem(location, new ItemStack(material, amount));
-        else location.getWorld().dropItemNaturally(location, new ItemStack(material, amount));
+    public static void dropItem(Location location, Material material, int amount) {
+        location.getWorld().dropItem(location, new ItemStack(material, amount));
     }
 
     private static void playGravel(Location location) {

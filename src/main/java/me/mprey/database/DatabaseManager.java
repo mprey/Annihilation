@@ -2,6 +2,8 @@ package me.mprey.database;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import me.mprey.stats.MapStatistics;
+import me.mprey.stats.PlayerStatistics;
 import me.mprey.stats.Statistics;
 
 import java.io.File;
@@ -31,6 +33,34 @@ public class DatabaseManager {
 
     public boolean isSQL() {
         return mySQLManager != null;
+    }
+
+    public void updateStatistics(Statistics stats) {
+        if (stats instanceof PlayerStatistics) {
+
+        } else if (stats instanceof MapStatistics) {
+
+        }
+    }
+
+    public void savePlayerSync() {
+
+    }
+
+    public void loadPlayer() {
+
+    }
+
+    public void savePlayerAsync() {
+
+    }
+
+    public void loadStatistics(Statistics stats) {
+        if (stats instanceof PlayerStatistics) {
+
+        } else if (stats instanceof MapStatistics) {
+
+        }
     }
 
     public void onDisable() {

@@ -1,6 +1,7 @@
 package me.mprey;
 
 import me.mprey.database.DatabaseManager;
+import me.mprey.database.YamlManager;
 import me.mprey.regen.RegeneratingBlock;
 import me.mprey.regen.RegeneratingBlockEffect;
 import me.mprey.regen.RegeneratingBlockManager;
@@ -56,7 +57,7 @@ public class Annihilation extends JavaPlugin {
         if (this.getConfig().getBoolean("database.MySQL")) {
             this.databaseManager = new DatabaseManager(ConfigUtil.loadMySQL());
         } else {
-            this.databaseManager = new DatabaseManager(new File(this.getDataFolder() + File.separator + "database"));
+            this.databaseManager = new DatabaseManager(new File(this.getDataFolder() + File.separator + "database" + File.separator + YamlManager.YAML_FILE));
         }
     }
 

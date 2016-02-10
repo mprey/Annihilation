@@ -1,6 +1,7 @@
 package me.mprey.regen;
 
 import me.mprey.Annihilation;
+import me.mprey.util.GameUtil;
 import me.mprey.util.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
