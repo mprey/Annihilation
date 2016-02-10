@@ -1,6 +1,7 @@
 package me.mprey.util;
 
 import me.mprey.Annihilation;
+import me.mprey.database.MySQLConfig;
 import me.mprey.regen.RegeneratingBlock;
 import me.mprey.regen.RegeneratingBlockEffect;
 import me.mprey.regen.RegeneratingBlockStructure;
@@ -123,6 +124,21 @@ public class ConfigUtil {
         }
 
         return null;
+    }
+
+    public static MySQLConfig loadMySQL() {
+        FileConfiguration config = Annihilation.getInstance().getConfig();
+
+        String host = config.getString("database.host");
+        String user = config.getString("database.username");
+        String pass = config.getString("database.password");
+        String database = config.getString("database.database");
+        long timeout = config.getLong("database.timeout");
+        int port = config.getInt("database.port");
+        int minConn = config.getInt("database.min_connections");
+        int maxConn = config.getInt("database.max_connections");
+
+        return new MySQLConfig(host, user, pass, database, timeout, port, minConn, maxConn);
     }
 
 }

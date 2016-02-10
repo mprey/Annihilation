@@ -1,5 +1,6 @@
 package me.mprey;
 
+import me.mprey.database.DatabaseManager;
 import me.mprey.regen.RegeneratingBlock;
 import me.mprey.regen.RegeneratingBlockEffect;
 import me.mprey.regen.RegeneratingBlockManager;
@@ -14,6 +15,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,23 +30,34 @@ public class Annihilation extends JavaPlugin {
 
     private RegeneratingBlockManager regeneratingBlockManager;
 
+    private DatabaseManager databaseManager;
+
     public void onEnable() {
         instance = this;
 
         this.saveDefaultConfig();
 
-        this.createRegeneratingBlocksManager();
+        this.initRegeneratingBlocksManager();
 
-
+        this.initDatabaseManager();
     }
 
     public void onDisable() {
         regeneratingBlockManager.onDisable();
+        databaseManager.onDisable();
     }
 
-    public void createRegeneratingBlocksManager() {
+    private void initRegeneratingBlocksManager() {
         long interval = this.getConfig().getLong("regen_blocks.interval");
         this.regeneratingBlockManager = new RegeneratingBlockManager(ConfigUtil.getRegeneratingBlockStructures(this.getConfig(), "regen_blocks.blocks"), interval);
+    }
+
+    private void initDatabaseManager() {
+        if (this.getConfig().getBoolean("database.MySQL")) {
+            this.databaseManager = new DatabaseManager(ConfigUtil.loadMySQL());
+        } else {
+            this.databaseManager = new DatabaseManager(new File(this.getDataFolder() + File.separator + "database"));
+        }
     }
 
     public static Annihilation getInstance() {
