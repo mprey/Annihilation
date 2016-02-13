@@ -23,8 +23,8 @@ public class DatabaseManager {
 
     private HikariDataSource dataSource;
 
-    public DatabaseManager(File dir) {
-        this.yamlManager = new YamlManager(dir);
+    public DatabaseManager() {
+        this.yamlManager = new YamlManager();
     }
 
     public DatabaseManager(MySQLConfig mySQLConfig) {
