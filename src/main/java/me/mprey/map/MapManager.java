@@ -1,5 +1,11 @@
 package me.mprey.map;
 
+import me.mprey.Annihilation;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,14 +15,47 @@ import java.util.List;
  */
 public class MapManager {
 
+    public static final String MAP_DIR = "games";
+
     private ArrayList<Map> mapList;
 
     public MapManager() {
         this.mapList = new ArrayList<>();
     }
 
-    public void loadMaps() {
+    private void loadMap(File configFile) {
+        FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        String mapName = config.getString("name");
+        if (mapName == null || mapName.isEmpty()) {
+            return;
+        }
 
+    }
+
+    public void loadMaps() {
+        File mapsDirectory = new File(Annihilation.getInstance().getDataFolder(), MAP_DIR);
+        if (!mapsDirectory.exists()) {
+            //TODO log unable to find map directory
+            return;
+        }
+        File[] subFiles = mapsDirectory.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                return file.isDirectory();
+            }
+        });
+        if (subFiles.length > 0) {
+            for (File mapDirectory : subFiles) {
+                File[] sub = mapDirectory.listFiles();
+                for (File cfg : sub) {
+                    if (cfg.isFile() && cfg.getName().equals("game.yml")) {
+                        loadMap(cfg);
+                    }
+                }
+            }
+        } else {
+            //TODO log unable to find any maps
+        }
     }
 
     public void addMap() {

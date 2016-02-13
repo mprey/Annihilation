@@ -10,6 +10,10 @@ public class GamePlayer {
 
     private PlayerStatistics stats;
 
+    private Player player;
+
+    private Game game;
+
     public GamePlayer(Player player) {
 
     }

@@ -1,15 +1,24 @@
 package me.mprey.map;
 
+import me.mprey.util.ConfigUtil;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+
+import java.util.*;
+import java.util.Map;
 
 /**
  * Created by Mason Prey on 2/8/16.
  */
-public class Region {
+public class Region implements ConfigurationSerializable {
 
     private Location maxCorner, minCorner;
+
+    public Region(Map<String, Object> deserialize) {
+        this(ConfigUtil.deserializeLocation(deserialize.get("max_corner")), ConfigUtil.deserializeLocation("min_corner"));
+    }
 
     public Region(Location cornerOne, Location cornerTwo) {
         this.maxCorner = getMaximumCorner(cornerOne, cornerTwo);
@@ -58,11 +67,19 @@ public class Region {
         return chunk.getX() >= this.minCorner.getX()
                 && chunk.getX() <= this.maxCorner.getX()
                 && chunk.getZ() >= this.minCorner.getZ()
-                && chunk.getZ() <= this.maxCorner.getZ());
+                && chunk.getZ() <= this.maxCorner.getZ();
     }
 
     public boolean isValid() {
         return maxCorner != null && minCorner != null && maxCorner.getWorld().getName().equals(minCorner.getWorld().getName());
     }
 
+    public Map<String, Object> serialize() {
+        Map<String, Object> serialize = new HashMap<>();
+
+        serialize.put("max_corner", ConfigUtil.serializeLocation(maxCorner));
+        serialize.put("min_corner", ConfigUtil.serializeLocation(minCorner));
+
+        return serialize;
+    }
 }

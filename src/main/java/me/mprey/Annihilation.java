@@ -41,6 +41,13 @@ public class Annihilation extends JavaPlugin {
         this.initRegeneratingBlocksManager();
 
         this.initDatabaseManager();
+
+        //TODO check if bungee
+        /*
+        if (Config#isBungee()) {
+            Game game = this.gameManager().startGame();
+        }
+         */
     }
 
     public void onDisable() {
@@ -57,7 +64,7 @@ public class Annihilation extends JavaPlugin {
         if (this.getConfig().getBoolean("database.MySQL")) {
             this.databaseManager = new DatabaseManager(ConfigUtil.loadMySQL());
         } else {
-            this.databaseManager = new DatabaseManager(new File(this.getDataFolder() + File.separator + "database" + File.separator + YamlManager.YAML_FILE));
+            this.databaseManager = new DatabaseManager();
         }
     }
 
