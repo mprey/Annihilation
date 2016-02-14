@@ -70,6 +70,10 @@ public class ConfigUtil {
     }
 
     public static Map<String, Object> serializeLocation(Location location) {
+        if (location == null) {
+            return null;
+        }
+
         Map<String, Object> section = new HashMap<String, Object>();
 
         section.put("x", location.getX());
@@ -83,6 +87,10 @@ public class ConfigUtil {
     }
 
     public static Location deserializeLocation(Object obj) {
+        if (obj == null) {
+            return null;
+        }
+
         if (obj instanceof Location) {
             return (Location) obj;
         }
@@ -124,6 +132,30 @@ public class ConfigUtil {
         }
 
         return null;
+    }
+
+    public static Map<String, Object> serializeLocationArray(List<Location> list) {
+        if (list == null) {
+            return null;
+        }
+
+        Map<String, Object> serialize = new HashMap<>();
+        for (int i = 0; i < list.size(); i++) {
+            serialize.put("location_" + i, serializeLocation(list.get(i)));
+        }
+        return serialize;
+    }
+
+    public static List<Location> deserializeLocationArray(Map<String, Object> deserialize) {
+        if (deserialize == null) {
+            return null;
+        }
+
+        List<Location> list = new ArrayList<>();
+        for (String key : deserialize.keySet()) {
+            list.add(deserializeLocation(deserialize.get(key)));
+        }
+        return list;
     }
 
     public static MySQLConfig loadMySQL() {

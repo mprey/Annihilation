@@ -1,9 +1,11 @@
 package me.mprey.game;
 
 import me.mprey.map.Region;
+import me.mprey.util.ConfigUtil;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,10 +28,21 @@ public class TeamLocation implements ConfigurationSerializable {
     }
 
     public TeamLocation(Map<String, Object> deserialize) {
+        this.nexus = new Region(deserialize.get(nexus));
+        this.spawns = ConfigUtil.deserializeLocationArray((Map<String, Object>) deserialize.get("spawns"));
+        this.enderFurnace = ConfigUtil.deserializeLocation(deserialize.get("ender_furnace"));
+        this.enderBrewer = ConfigUtil.deserializeLocation("ender_brewer");
+        this.enderChest = ConfigUtil.deserializeLocation("ender_chest");
+    }
 
+    public TeamLocation(Object object) {
+        this((Map<String, Object>) object);
     }
 
     public Region getNexus() {
+        if (nexus == null) {
+            nexus = new Region(null, null);
+        }
         return nexus;
     }
 
@@ -46,14 +59,28 @@ public class TeamLocation implements ConfigurationSerializable {
     }
 
     public List<Location> getSpawns() {
+        if (spawns == null) {
+            spawns = new ArrayList<>();
+        }
         return spawns;
+    }
+
+    public boolean check() {
+        return nexus != null && nexus.isValid() &&
+                spawns != null && spawns.size() > 0 &&
+                enderFurnace != null &&
+                enderBrewer != null &&
+                enderChest != null;
     }
 
     public Map<String, Object> serialize() {
         Map<String, Object> serialize = new HashMap<>();
 
         serialize.put("region", this.nexus.serialize());
-        serialize.put("")
+        serialize.put("spawns", ConfigUtil.serializeLocationArray(spawns));
+        serialize.put("ender_furnace", ConfigUtil.serializeLocation(enderFurnace));
+        serialize.put("ender_brewer", ConfigUtil.serializeLocation(enderFurnace));
+        serialize.put("ender_chest", ConfigUtil.serializeLocation(enderChest));
 
         return null;
     }

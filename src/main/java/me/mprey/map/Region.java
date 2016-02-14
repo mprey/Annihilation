@@ -20,13 +20,20 @@ public class Region implements ConfigurationSerializable {
         this(ConfigUtil.deserializeLocation(deserialize.get("max_corner")), ConfigUtil.deserializeLocation("min_corner"));
     }
 
+    public Region(Object object) {
+        this((Map<String, Object>) object);
+    }
+
     public Region(Location cornerOne, Location cornerTwo) {
         this.maxCorner = getMaximumCorner(cornerOne, cornerTwo);
         this.minCorner = getMinimumCorner(cornerOne, cornerTwo);
     }
 
     public World getWorld() {
-        return minCorner.getWorld();
+        if (minCorner != null ) {
+            return minCorner.getWorld();
+        }
+        return null;
     }
 
     public Location getMaxCorner() {
@@ -35,6 +42,10 @@ public class Region implements ConfigurationSerializable {
 
     public Location getMinCorner() {
         return minCorner;
+    }
+
+    public void addLocation(Location loc) {
+        //TODO
     }
 
     private Location getMinimumCorner(Location cornerOne, Location cornerTwo) {
@@ -52,7 +63,7 @@ public class Region implements ConfigurationSerializable {
     }
 
     public boolean isWithin(Location input) {
-        if (input.getWorld().getName().equals(getWorld().getName())) {
+        if (minCorner != null && maxCorner != null && input.getWorld().getName().equals(getWorld().getName())) {
             return (input.getBlockX() >= this.minCorner.getBlockX()
                     && input.getBlockX() <= this.maxCorner.getBlockX()
                     && input.getBlockY() >= this.minCorner.getBlockY()
@@ -64,10 +75,13 @@ public class Region implements ConfigurationSerializable {
     }
 
     public boolean isWithin(Chunk chunk) {
-        return chunk.getX() >= this.minCorner.getX()
-                && chunk.getX() <= this.maxCorner.getX()
-                && chunk.getZ() >= this.minCorner.getZ()
-                && chunk.getZ() <= this.maxCorner.getZ();
+        if (minCorner != null && maxCorner != null) {
+            return chunk.getX() >= this.minCorner.getX()
+                    && chunk.getX() <= this.maxCorner.getX()
+                    && chunk.getZ() >= this.minCorner.getZ()
+                    && chunk.getZ() <= this.maxCorner.getZ();
+        }
+        return false;
     }
 
     public boolean isValid() {

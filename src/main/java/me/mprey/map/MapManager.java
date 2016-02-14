@@ -1,6 +1,9 @@
 package me.mprey.map;
 
 import me.mprey.Annihilation;
+import me.mprey.game.TeamLocation;
+import me.mprey.util.ConfigUtil;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -15,7 +18,7 @@ import java.util.List;
  */
 public class MapManager {
 
-    public static final String MAP_DIR = "games";
+    public static final String MAP_DIR = "maps";
 
     private ArrayList<Map> mapList;
 
@@ -25,11 +28,15 @@ public class MapManager {
 
     private void loadMap(File configFile) {
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-        String mapName = config.getString("name");
-        if (mapName == null || mapName.isEmpty()) {
-            return;
+        try {
+            Map map = new Map(config);
+            if (map != null) {
+                mapList.add(map);
+            }
+        } catch (Exception e) {
+            //TODO print out unable to load map mapName
+            e.printStackTrace();
         }
-
     }
 
     public void loadMaps() {
@@ -58,12 +65,20 @@ public class MapManager {
         }
     }
 
-    public void addMap() {
-
+    public boolean addMap(String map) {
+        if (!isMap(map)) {
+            mapList.add(new Map(map));
+        }
+        return true;
     }
 
     public void removeMap() {
+        //TODO
+    }
 
+    public MapErrorCode saveMap(Map map) {
+        //TODO
+        return null;
     }
 
     public Map getMap(String name) {
@@ -83,14 +98,27 @@ public class MapManager {
         return mapList;
     }
 
-    public Map[] randomMapArray(int amount) {
-        if (amount > 0 && mapList.size() != 0) {
-            if (mapList.size() <= amount) {
-                return mapList.toArray(new Map[0]);
+    public ArrayList<Map> getValidMaps() {
+        ArrayList<Map> validMaps = new ArrayList<>();
+        for (Map m : getMapList()) {
+            if (m.checkMap() == MapErrorCode.OK) {
+                validMaps.add(m);
             }
-            List<Map> list = new ArrayList<>(mapList.size());
-            for (Map m : mapList) {
-                list.add(m);
+        }
+        return validMaps;
+    }
+
+    public Map[] randomMapArray(int amount) {
+        ArrayList<Map> valid = getValidMaps();
+        if (amount > 0 && valid.size() != 0) {
+            if (valid.size() <= amount) {
+                return valid.toArray(new Map[0]);
+            }
+            List<Map> list = new ArrayList<>(valid.size());
+            for (Map m : valid) {
+                if (m.checkMap() == MapErrorCode.OK) {
+                    list.add(m);
+                }
             }
             Collections.shuffle(list);
 
