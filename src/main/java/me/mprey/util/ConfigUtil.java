@@ -31,7 +31,7 @@ public class ConfigUtil {
                             getMaterial(config, path + ".reward"),
                             config.getInt(path + ".reward_amount"),
                             config.getInt(path + ".delay") * 20L,
-                            config.getBoolean(path + ".natural_drop"),      //wtf is going on O_O :DDD its 1am
+                            config.getBoolean(path + ".natural_drop"),
                             getMaterial(config, path + ".place_holder"),
                             config.getInt(path + ".exp_reward"),
                             getSound(config, path + ".sound"),
@@ -161,14 +161,14 @@ public class ConfigUtil {
     public static MySQLConfig loadMySQL() {
         FileConfiguration config = Annihilation.getInstance().getConfig();
 
-        String host = config.getString("database.host");
-        String user = config.getString("database.username");
-        String pass = config.getString("database.password");
-        String database = config.getString("database.database");
-        long timeout = config.getLong("database.timeout");
-        int port = config.getInt("database.port");
-        int minConn = config.getInt("database.min_connections");
-        int maxConn = config.getInt("database.max_connections");
+        String host = config.getString("database.mysql.host");
+        String user = config.getString("database.mysql.username");
+        String pass = config.getString("database.mysql.password");
+        String database = config.getString("database.mysql.database");
+        long timeout = config.getLong("database.mysql.timeout");
+        int port = config.getInt("database.mysql.port");
+        int minConn = config.getInt("database.mysql.min_connections");
+        int maxConn = config.getInt("database.mysql.max_connections");
 
         return new MySQLConfig(host, user, pass, database, timeout, port, minConn, maxConn);
     }

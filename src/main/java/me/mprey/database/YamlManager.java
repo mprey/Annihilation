@@ -1,6 +1,9 @@
 package me.mprey.database;
 
 import me.mprey.Annihilation;
+import me.mprey.stats.MapStatistics;
+import me.mprey.stats.PlayerStatistics;
+import me.mprey.stats.Statistics;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -15,65 +18,70 @@ import java.util.UUID;
  */
 public class YamlManager {
 
-    public static String YAML_DIR = "database";
+    public static String YAML_DIR = "database", MAPS_DIR = "map_stats", PLAYERS_DIR = "player_stats";
 
-    private File dir;
-
-    private HashMap<UUID, File> fileCache;
+    private File mapDir, playerDir;
 
     public YamlManager() {
-        this.dir = new File(Annihilation.getInstance().getDataFolder(), YAML_DIR);
-        this.fileCache = new HashMap<>();
-        if (!this.dir.exists()) {
+        this.mapDir = new File(Annihilation.getInstance().getDataFolder() + File.separator + YAML_DIR + File.separator + MAPS_DIR);
+        this.playerDir = new File(Annihilation.getInstance().getDataFolder() + File.separator + YAML_DIR + File.separator + PLAYERS_DIR);
+    }
+
+    public void init() {
+        if (!this.playerDir.exists()) {
             try {
-                this.dir.createNewFile();
+                this.playerDir.createNewFile();
+            } catch (IOException e) {
+                //TODO log failure to create file
+            }
+        }
+        if (!this.mapDir.exists()) {
+            try {
+                this.mapDir.createNewFile();
             } catch (IOException e) {
                 //TODO log failure to create file
             }
         }
     }
 
-    public boolean entryExists(Player player) {
-        return entryExists(player.getUniqueId());
+    public boolean exists(Statistics stats) {
+        return getFile(stats).exists();
     }
 
-    public boolean entryExists(UUID uuid) {
-        return new File(dir, uuid.toString() + ".yml").exists();
-    }
-
-    public void createPlayerFile(Player player) {
-        createPlayerFile(player.getUniqueId());
-    }
-
-    public File createPlayerFile(UUID uuid) {
-        if (!entryExists(uuid)) {
-            File playerFile = new File(dir, uuid.toString() + ".yml");
+    public void newEntry(Statistics stats) {
+        File file = getFile(stats);
+        file.mkdirs();
+        if (!file.exists()) {
             try {
-                if (!playerFile.createNewFile()) {
-                    //TODO log unable to create player file
-                    return null;
-                }
-                return fileCache.put(uuid, playerFile);
+                file.createNewFile();
+                stats.copyDefaults(YamlConfiguration.loadConfiguration(file));
+                save(stats);
             } catch (IOException e) {
-                //TODO log unable to create
+                e.printStackTrace();
             }
         }
-        return fileCache.get(uuid);
     }
 
-    public File getPlayerFile(Player player) {
-        return getPlayerFile(player.getUniqueId());
+    public void updateStatistics(Statistics stats) {
+        stats.updateWithConfig(YamlConfiguration.loadConfiguration(getFile(stats)));
+        save(stats);
     }
 
-    public File getPlayerFile(UUID uuid) {
-        if (fileCache.containsKey(uuid)) {
-            return fileCache.get(uuid);
+    public void loadStatistics(Statistics stats) {
+        stats.updateWithConfig(YamlConfiguration.loadConfiguration(getFile(stats)));
+    }
+
+    public void save(Statistics stats) {
+        File statsFile = getFile(stats);
+        try {
+            YamlConfiguration.loadConfiguration(statsFile).save(statsFile);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return createPlayerFile(uuid);
     }
 
-    private void copyDefaults(File file) {
-
+    private File getFile(Statistics stats) {
+        return new File(Annihilation.getInstance().getDataFolder() + File.separator + YAML_DIR + File.separator + stats.getYAMLDir() + File.separator + stats.getKeyValue() + ".yml");
     }
 
 }

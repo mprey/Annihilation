@@ -3,19 +3,56 @@
 #### MADE BY MASON PREY ####
 ###########################
 
-# Enter true if you wish to run Annihilation with Bungee Servers
+# Enter true if you wish to run Annihilation with Bungee Servers (only one game per server instance)
 bungee_mode: false
+
+###########################
+######### DATABASE ########
+###########################
+database:
+
+    # Enter true if you want to use a MySQL database, or else the plugin will use flat-file (YAML) storage
+    use_mysql: false
+
+    # MySQL database information
+    mysql:
+
+        # Hostname for MySQL server
+        host:
+
+        # Username for user with all permissions for the database
+        username:
+
+        # Password for the username above
+        password:
+
+        # Database that the plugin will run off of
+        database:
+
+        # Port to connect to the server
+        port:
+
+        # Time (miliseconds) before a connection will timeout
+        timeout: 5000
+
+        # Minimum number of connections to the server for pooling (DO NOT CHANGE IF YOU DO NOT UNDERSTAND)
+        min_connections: 2
+
+        # Maximum number of connections to the server for pooling (DO NOT CHANGE IF YOU DO NOT UNDERSTAND)
+        max_connections: 6
+
 
 ###########################
 ### REGENERATING BLOCKS ###
 ###########################
 regen_blocks:
 
-    # Time interval between respawning blocks in long units (keep default if you do not understand)
+    # Time interval between checking respawning blocks in long units (DO NOT CHANGE IF YOU DO NOT UNDERSTAND)
     interval: 10
 
     # List of blocks
     blocks:
+
         # Each category must be uniquely named (any name is fine as long as it is not repeated)
         coal_ore:
 

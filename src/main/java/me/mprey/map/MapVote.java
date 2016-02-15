@@ -1,6 +1,11 @@
 package me.mprey.map;
 
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Mason Prey on 2/8/16.
@@ -9,11 +14,14 @@ public class MapVote {
 
     private HashMap<Map, Integer> voteMap;
 
+    private List<UUID> voters;
+
     private Map[] mapArray;
 
     public MapVote(Map[] mapArray) {
         this.mapArray = mapArray;
         this.voteMap = new HashMap<>();
+        this.voters = new ArrayList<>();
         populate();
     }
 
@@ -33,14 +41,16 @@ public class MapVote {
         }
     }
 
-    public void addVote(int index) {
-        addVote(mapArray[index]);
+    public void addVote(Player player, int index) {
+        addVote(player, mapArray[index]);
     }
 
-    public void addVote(Map m) {
-        if (voteMap.containsKey(m)) {
+    public boolean addVote(Player player, Map m) {
+        if (!voters.contains(player.getUniqueId()) && voteMap.containsKey(m)) {
             voteMap.put(m, voteMap.get(m) + 1);
+            voters.add(player.getUniqueId());
         }
+        return false;
     }
 
     public Map getWinner() {

@@ -3,3 +3,7 @@ author: mprey
 version: 1.0.0
 website: http://mprey.me
 main: me.mprey.Annihilation
+commands:
+  annihilation:
+    aliases: [anni, an]
+    description: /anni help

@@ -21,8 +21,6 @@ public class DatabaseManager {
 
     private YamlManager yamlManager;
 
-    private HikariDataSource dataSource;
-
     public DatabaseManager() {
         this.yamlManager = new YamlManager();
     }
@@ -35,31 +33,40 @@ public class DatabaseManager {
         return mySQLManager != null;
     }
 
-    public void updateStatistics(Statistics stats) {
-        if (stats instanceof PlayerStatistics) {
 
-        } else if (stats instanceof MapStatistics) {
-
+    public boolean exists(Statistics stats) {
+        if (isSQL()) {
+            return mySQLManager.exists(stats);
         }
+        return yamlManager.exists(stats);
     }
 
-    public void savePlayerSync() {
-
+    public void newEntry(Statistics stats) {
+        if (isSQL()) {
+            mySQLManager.newEntry(stats);
+            return;
+        }
+        yamlManager.newEntry(stats);
     }
 
-    public void loadPlayer() {
-
-    }
-
-    public void savePlayerAsync() {
-
+    public void updateStatistics(Statistics stats) {
+        if (isSQL()) {
+            mySQLManager.updateStatistics(stats);
+            return;
+        }
+        yamlManager.updateStatistics(stats);
     }
 
     public void loadStatistics(Statistics stats) {
-        if (stats instanceof PlayerStatistics) {
-
-        } else if (stats instanceof MapStatistics) {
-
+        if (exists(stats)) {
+            if (isSQL()) {
+                mySQLManager.loadStatistics(stats);
+                return;
+            }
+            yamlManager.loadStatistics(stats);
+        } else {
+            newEntry(stats);
+            stats.setDefault();
         }
     }
 

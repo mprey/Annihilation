@@ -24,9 +24,9 @@ public class Region implements ConfigurationSerializable {
         this((Map<String, Object>) object);
     }
 
-    public Region(Location cornerOne, Location cornerTwo) {
-        this.maxCorner = getMaximumCorner(cornerOne, cornerTwo);
-        this.minCorner = getMinimumCorner(cornerOne, cornerTwo);
+    public Region(Location max, Location min) {
+        this.maxCorner = max;
+        this.minCorner = min;
     }
 
     public World getWorld() {
@@ -44,22 +44,12 @@ public class Region implements ConfigurationSerializable {
         return minCorner;
     }
 
-    public void addLocation(Location loc) {
-        //TODO
+    public void setMaxCorner(Location loc) {
+        this.maxCorner = loc;
     }
 
-    private Location getMinimumCorner(Location cornerOne, Location cornerTwo) {
-        return new Location(this.getWorld(), Math.min(cornerOne.getBlockX(),
-                cornerTwo.getBlockX()),
-                Math.min(cornerOne.getBlockY(), cornerTwo.getBlockY()), Math.min(
-                cornerOne.getBlockZ(), cornerTwo.getBlockZ()));
-    }
-
-    private Location getMaximumCorner(Location cornerOne, Location cornerTwo) {
-        return new Location(this.getWorld(), Math.max(cornerOne.getBlockX(),
-                cornerTwo.getBlockX()),
-                Math.max(cornerOne.getBlockY(), cornerTwo.getBlockY()), Math.max(
-                cornerOne.getBlockZ(), cornerTwo.getBlockZ()));
+    public void setMinCorner(Location loc) {
+        this.minCorner = loc;
     }
 
     public boolean isWithin(Location input) {

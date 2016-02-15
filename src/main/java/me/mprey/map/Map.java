@@ -1,25 +1,30 @@
 package me.mprey.map;
 
+import me.mprey.Annihilation;
 import me.mprey.game.TeamLocation;
 import me.mprey.util.ConfigUtil;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * Created by Mason Prey on 2/8/16.
  */
-public class Map {
+public class Map implements ConfigurationSerializable {
 
     private String name;
     private Region mapArea;
     private TeamLocation green, yellow, red, blue;
     private Location lobby;
-    private List<Location> diamonds, bosses;
+    private List<Location> diamonds;
 
-    public Map(String name, Region mapArea, Location lobby, TeamLocation red, TeamLocation green, TeamLocation yellow, TeamLocation blue, List<Location> diamonds, List<Location> bosses) {
+    public Map(String name, Region mapArea, Location lobby, TeamLocation red, TeamLocation green, TeamLocation yellow, TeamLocation blue, List<Location> diamonds) {
         this.name = name;
         this.lobby = lobby;
         this.red = red;
@@ -27,7 +32,6 @@ public class Map {
         this.green = green;
         this.yellow = yellow;
         this.blue = blue;
-        this.bosses = bosses;
         this.diamonds = diamonds;
     }
 
@@ -38,27 +42,22 @@ public class Map {
     public Map(FileConfiguration config) throws Exception {
         this.name = config.getString("name");
         this.lobby = ConfigUtil.deserializeLocation(config.get("lobby"));
-        this.mapArea = new Region(config.getConfigurationSection("region").getKeys(false));
+        this.mapArea = new Region(config.getConfigurationSection("region").getValues(false));
         this.red = new TeamLocation(config.getConfigurationSection("team_red").getValues(false));
         this.yellow = new TeamLocation(config.getConfigurationSection("team_yellow").getValues(false));
         this.green = new TeamLocation(config.getConfigurationSection("team_green").getValues(false));
         this.blue = new TeamLocation(config.getConfigurationSection("team_blue").getValues(false));
         this.diamonds = ConfigUtil.deserializeLocationArray(config.getConfigurationSection("diamonds").getValues(false));
-        this.bosses = ConfigUtil.deserializeLocationArray(config.getConfigurationSection("bosses").getValues(false));
     }
 
     public String getName() {
         return name;
     }
 
-    public List<Location> getBosses() {
-        if (bosses == null ) {
-            bosses = new ArrayList<>();
-        }
-        return bosses;
-    }
-
     public List<Location> getDiamonds() {
+        if (diamonds == null) {
+            diamonds = new ArrayList<>();
+        }
         return diamonds;
     }
 
@@ -79,6 +78,9 @@ public class Map {
     }
 
     public Region getMapArea() {
+        if (mapArea == null) {
+            mapArea = new Region(null, null);
+        }
         return mapArea;
     }
 
@@ -105,7 +107,44 @@ public class Map {
         return MapErrorCode.OK;
     }
 
+    public void save() {
+        File config = new File(Annihilation.getInstance().getDataFolder() + File.separator + MapManager.MAP_DIR + File.separator + this.name + File.separator + "game.yml");
+        if (config == null) {
+            return;
+        }
+        config.mkdirs();
+        if (config.exists()) {
+            config.delete();
+        }
+        createConfig();
+    }
+
+    private void createConfig() {
+        FileConfiguration config = YamlConfiguration.loadConfiguration(Annihilation.getInstance().getMapManager().getMapFile(this));
+        if (config == null) {
+            return;
+        }
+
+        config.addDefaults(serialize());
+    }
+
+
     public boolean equals(Map other) {
         return name.equals(other);
+    }
+
+    public java.util.Map<String, Object> serialize() {
+        java.util.Map<String, Object> serialize = new HashMap<>();
+
+        serialize.put("name", this.name);
+        serialize.put("region", this.mapArea.serialize());
+        serialize.put("lobby", ConfigUtil.serializeLocation(this.lobby));
+        serialize.put("team_red", this.red.serialize());
+        serialize.put("team_blue", this.blue.serialize());
+        serialize.put("team_green", this.green.serialize());
+        serialize.put("team_yellow", this.yellow.serialize());
+        serialize.put("diamonds", ConfigUtil.serializeLocationArray(this.diamonds));
+
+        return serialize;
     }
 }
