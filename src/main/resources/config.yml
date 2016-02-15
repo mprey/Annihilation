@@ -9,6 +9,9 @@ bungee_mode: false
 # Chat prefix for plugin messages
 chat_prefix: '&c[&4Annihilation&c]'
 
+# Locale for server
+locale: en
+
 ###########################
 ######### DATABASE ########
 ###########################
