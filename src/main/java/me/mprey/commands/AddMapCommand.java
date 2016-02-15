@@ -14,37 +14,34 @@ public class AddMapCommand extends BaseCommand {
         super(instance);
     }
 
-    @Override
     public String getCommand() {
         return "addmap";
     }
 
-    @Override
     public String getPermission() {
         return "setup";
     }
 
-    @Override
     public String getName() {
         return "addmap"; //TODO locale
     }
 
-    @Override
     public String getDescription() {
         return "adds a map"; //TODO locale
     }
 
-    @Override
     public String[] getArguments() {
         return new String[]{"map"};
     }
 
-    @Override
     public boolean consoleFriendly() {
         return true;
     }
 
-    @Override
+    public String getUsage() {
+        return "/anni addmap {mapname}"; //TODO locale
+    }
+
     public boolean execute(CommandSender sender, ArrayList<String> args) {
         String map = args.get(0);
         if (getInstance().getMapManager().isMap(map)) {

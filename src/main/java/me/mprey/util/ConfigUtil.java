@@ -1,5 +1,6 @@
 package me.mprey.util;
 
+import com.google.common.collect.ImmutableMap;
 import me.mprey.Annihilation;
 import me.mprey.database.MySQLConfig;
 import me.mprey.regen.RegeneratingBlock;
@@ -25,48 +26,14 @@ public class ConfigUtil {
         ArrayList<RegeneratingBlockStructure> structureList = new ArrayList<>();
         if (config != null && path != null && config.isConfigurationSection(path)) {
             for (String key : config.getConfigurationSection(path).getKeys(false)) {
-                try {
-                    RegeneratingBlockStructure structure = new RegeneratingBlockStructure(
-                            getMaterial(config, path + ".type"),
-                            getMaterial(config, path + ".reward"),
-                            config.getInt(path + ".reward_amount"),
-                            config.getInt(path + ".delay") * 20L,
-                            config.getBoolean(path + ".natural_drop"),
-                            getMaterial(config, path + ".place_holder"),
-                            config.getInt(path + ".exp_reward"),
-                            getSound(config, path + ".sound"),
-                            getRegeneratingBlockEffect(config, path + ".effect"));
-                    if (structure != null && structure.isValid()) {
-                        structureList.add(structure);
-                    }
-                } catch (Exception e) { //bad programming?
-                    Annihilation.getInstance().getLogger().log(Level.SEVERE, "TODO"); //TODO replace with lang file
-                    e.printStackTrace();
+                RegeneratingBlockStructure structure = new RegeneratingBlockStructure(config.getConfigurationSection(path + "." + key).getValues(false));
+                if (structure.isValid()) {
+                    structureList.add(structure);
+                    Annihilation._l("success.regen_blocks.loaded", ImmutableMap.of("structure", structure.getType().toString()));
                 }
             }
         }
         return structureList;
-    }
-
-    public static Sound getSound(FileConfiguration config, String path) {
-        if (config != null && config.isConfigurationSection(path)) {
-            return Sound.valueOf(config.getString(path).toUpperCase());
-        }
-        return null;
-    }
-
-    public static RegeneratingBlockEffect getRegeneratingBlockEffect(FileConfiguration config, String path) {
-        if (config != null && config.isConfigurationSection(path)) {
-            return RegeneratingBlockEffect.valueOf(config.getString(path).toUpperCase());
-        }
-        return null;
-    }
-
-    public static Material getMaterial(FileConfiguration config, String path) {
-        if (config != null && config.isConfigurationSection(path)) {
-            return Material.getMaterial(config.getString(path).toUpperCase());
-        }
-        return null;
     }
 
     public static Map<String, Object> serializeLocation(Location location) {

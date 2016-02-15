@@ -15,6 +15,8 @@ public interface ICommand {
 
     String getName();
 
+    String getUsage();
+
     String getDescription();
 
     String[] getArguments();

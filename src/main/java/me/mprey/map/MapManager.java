@@ -44,13 +44,9 @@ public class MapManager {
     }
 
     public void loadMaps() {
-        File mapsDirectory = new File(Annihilation.getInstance().getDataFolder(), MAP_DIR);
+        File mapsDirectory = new File(Annihilation.getInstance().getDataFolder() + File.separator + MAP_DIR);
         if (!mapsDirectory.exists()) {
-            try {
-                mapsDirectory.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            mapsDirectory.mkdir();
         }
         File[] subFiles = mapsDirectory.listFiles(new FileFilter() {
             @Override

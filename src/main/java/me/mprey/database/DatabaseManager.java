@@ -73,8 +73,6 @@ public class DatabaseManager {
     public void onDisable() {
         if (isSQL()) {
             mySQLManager.closePool();
-        } else {
-            //TODO close YAML?
         }
     }
 

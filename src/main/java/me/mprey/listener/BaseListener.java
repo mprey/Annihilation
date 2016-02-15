@@ -1,6 +1,5 @@
 package me.mprey.listener;
 
-import apple.util.JavaPluginSelector;
 import me.mprey.Annihilation;
 import org.bukkit.event.Listener;
 

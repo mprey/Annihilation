@@ -1,1 +1,25 @@
 errors:
+  map:
+    already_exists: '&cMap $map$ already exists!'
+    unable_to_load: '&cUnable to load map $map$!'
+    no_maps: 'Unable to find any maps!'
+  commands:
+    no_permission: '&cYou do not have permission!'
+    no_console: '&cConsoles cannot use this command.'
+    invalid_args: 'Invalid arguments! Usage: $usage$'
+
+success:
+  map:
+    added_map: '&4Added map $map$!'
+    loaded_map: 'Loaded map $map$ successfully.'
+  regen_blocks:
+    loaded: 'Loaded regenerating block type $structure$!'
+commands:
+  addmap:
+    name: 'Addmap'
+    usage: '/anni addmap {mapname}'
+    description: 'Add a map to the map pool'
+shop:
+  lore: '&5Price: $price$ gold'
+extra:
+  enable_time: 'Took $time$ miliseconds to enable Annihilation!'

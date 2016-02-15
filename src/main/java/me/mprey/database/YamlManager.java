@@ -30,16 +30,18 @@ public class YamlManager {
     public void init() {
         if (!this.playerDir.exists()) {
             try {
+                this.playerDir.mkdirs();
                 this.playerDir.createNewFile();
             } catch (IOException e) {
-                //TODO log failure to create file
+                e.printStackTrace();
             }
         }
         if (!this.mapDir.exists()) {
             try {
+                this.mapDir.mkdirs();
                 this.mapDir.createNewFile();
             } catch (IOException e) {
-                //TODO log failure to create file
+                e.printStackTrace();
             }
         }
     }

@@ -134,7 +134,6 @@ public class MySQLManager {
             ps = conn.prepareStatement(query);
             ps.executeUpdate();
         } catch (SQLException e) {
-            //TODO log exception into console
             e.printStackTrace();
         } finally {
             clean(conn);

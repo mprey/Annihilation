@@ -1,5 +1,8 @@
 package me.mprey.commands;
 
+import com.google.common.collect.ImmutableMap;
+import me.mprey.Annihilation;
+import me.mprey.ChatWriter;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -21,7 +24,8 @@ public class CommandManager implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length < 1) {
-            return false;
+            sender.sendMessage("/anni help");
+            return true;
         }
         String command = args[0];
 
@@ -31,13 +35,13 @@ public class CommandManager implements CommandExecutor {
         for (BaseCommand baseCommand : commands) {
             if (baseCommand.getCommand().equalsIgnoreCase(command)) {
                 if (baseCommand.getArguments().length > argList.size()) {
-                    sender.sendMessage("WRONG ARGS!"); //TODO locale
+                    sender.sendMessage(ChatWriter.write(Annihilation._l("errors.commands.invalid_args", ImmutableMap.of("usage", baseCommand.getUsage()))));
                     return false;
                 }
                 return baseCommand.execute(sender, argList);
             }
         }
-
+        sender.sendMessage("/anni help");
         return false;
     }
 }

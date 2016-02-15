@@ -22,25 +22,6 @@ public class GameManager {
         this.playerGameMap = new HashMap<>();
     }
 
-    public void loadGames() {
 
-    }
-
-    private void loadGame(YamlConfiguration config) {
-        //blue spawn
-        //red spawn
-        //yellow spawn
-        //green spawn
-        //lobby spawn
-        //sign locations
-        //holo locations
-        //boss spawns
-        //boss rewards
-        //blue enderchest, enderbrewer, enderfurnace, nexus, blue region
-        //yellow enderchest, enderbrewer, enderfurnace, nexus, yellow region
-        //green enderchest, enderbrewer, enderfurance, nexus, green region
-        //red enderchest, enderbrewer, enderfurnace, nexus, red region
-        //diamond locations
-    }
 
 }

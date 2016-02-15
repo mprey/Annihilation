@@ -6,6 +6,9 @@
 # Enter true if you wish to run Annihilation with Bungee Servers (only one game per server instance)
 bungee_mode: false
 
+# Chat prefix for plugin messages
+chat_prefix: '&c[&4Annihilation&c]'
+
 ###########################
 ######### DATABASE ########
 ###########################
@@ -77,7 +80,7 @@ regen_blocks:
             place_holder: COBBLESTONE
 
             # Exp reward for mining the block
-            # Enter 0 if you want to reward
+            # Enter 0 if you want no reward
             exp_reward: 5
 
             # Sound to be played when the block is mined
