@@ -7,7 +7,7 @@ public enum MapErrorCode {
 
     OK(200),
     MAP_NAME_NULL(400),
-    MAP_REGION_NULL(401),
+    MAP_REGION_ERROR(401),
     MAP_LOBBY_NULL(402),
     RED_LOCATION_ERROR(403),
     BLUE_LOCATION_ERROR(404),
@@ -22,6 +22,10 @@ public enum MapErrorCode {
 
     public int getCode() {
         return code;
+    }
+
+    public String getPath() {
+        return this.name().toLowerCase();
     }
 
     public static MapErrorCode valueOf(int code) {

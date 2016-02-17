@@ -2,23 +2,43 @@ errors:
   map:
     already_exists: '&cMap $map$ already exists!'
     unable_to_load: '&cUnable to load map $map$!'
+    not_found: '&cMap $map$ does not exist.'
     no_maps: 'Unable to find any maps!'
+    saving_error: 'Error while saving map $map$: $error$'
+
+    map_name_null: 'Map name not found'
+    map_region_error: 'Map region is invalid'
+    map_lobby_null: 'Map lobby not found'
+    red_location_error: 'Red locations are invalid'
+    blue_location_error: 'Blue locations are invalid'
+    yellow_location_error: 'Yellow locations are invalid'
+    green_location_error: 'Green locations are invalid'
   commands:
     no_permission: '&cYou do not have permission!'
     no_console: '&cConsoles cannot use this command.'
     invalid_args: 'Invalid arguments! Usage: $usage$'
 
+  locale:
+    not_found: 'Unable to locate locale $locale$! Defaulting to fallback locale.'
+
 success:
   map:
-    added_map: '&4Added map $map$!'
-    loaded_map: 'Loaded map $map$ successfully.'
+    added: '&4Added map $map$!'
+    loaded: 'Loaded map $map$ successfully.'
+    saved: 'Successfully saved map $map$!'
   regen_blocks:
     loaded: 'Loaded regenerating block type $structure$!'
+  locale:
+    loaded: 'Successfully loaded locale $locale$!'
 commands:
   addmap:
-    name: 'Addmap'
+    name: 'addmap'
     usage: '/anni addmap {mapname}'
     description: 'Add a map to the map pool'
+  save:
+    name: 'save'
+    usage: '/anni save {mapname}'
+    description: 'Save a map to file'
 shop:
   lore: '&5Price: $price$ gold'
 extra:

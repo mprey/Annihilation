@@ -18,6 +18,15 @@ public class LocalizationConfig extends YamlConfiguration {
 
     private LocalizationConfig fallback;
 
+    public boolean isLocale(String locale) {
+        for (String s : availableLocales) {
+            if (s.equalsIgnoreCase(locale)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void saveLocales(boolean overwrite) {
         try {
             for (String locale : availableLocales) {

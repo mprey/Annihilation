@@ -3,6 +3,7 @@ package me.mprey;
 import com.google.common.collect.ImmutableMap;
 import me.mprey.commands.AddMapCommand;
 import me.mprey.commands.CommandManager;
+import me.mprey.commands.SaveMapCommand;
 import me.mprey.database.DatabaseManager;
 import me.mprey.database.YamlManager;
 import me.mprey.localization.LocalizationConfig;
@@ -58,7 +59,7 @@ public class Annihilation extends JavaPlugin {
         this.mapManager = new MapManager();
         this.mapManager.loadMaps();
 
-        this.getCommand("annihilation").setExecutor(new CommandManager(new AddMapCommand(this)));
+        this.getCommand("annihilation").setExecutor(new CommandManager(new AddMapCommand(this), new SaveMapCommand(this)));
 
         //TODO check if bungee
         /*
@@ -104,7 +105,14 @@ public class Annihilation extends JavaPlugin {
     private void initLocalization() {
         this.localization = new LocalizationConfig();
         this.localization.saveLocales(false);
-        this.localization.loadLocale(this.getConfig().getString("locale", FALLBACK_LOCALE), false);
+        String locale = this.getConfig().getString("locale");
+        if (this.localization.isLocale(locale)) {
+            this.localization.loadLocale(locale, false);
+            this.getLogger().info(Annihilation._l("success.locale.loaded", ImmutableMap.of("locale", locale)));
+        } else {
+            this.localization.loadLocale(FALLBACK_LOCALE, false);
+            this.getLogger().info(Annihilation._l("errors.locale.not_found", ImmutableMap.of("locale", locale)));
+        }
     }
 
     public void reloadLocalization() {

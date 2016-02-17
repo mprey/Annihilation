@@ -1,5 +1,6 @@
 package me.mprey.map;
 
+import com.google.common.collect.ImmutableMap;
 import me.mprey.Annihilation;
 import me.mprey.game.TeamLocation;
 import me.mprey.stats.MapStatistics;
@@ -30,15 +31,16 @@ public class MapManager {
 
     private void loadMap(File configFile) {
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        String mapName = config.getString("name");
         try {
             Map map = new Map(config);
             if (map != null) {
                 mapList.add(map);
                 MapStatistics.getStatistics(map);
-                Annihilation.getInstance().getLogger().info("loaded map " + map.getName() + "!"); //TODO locale
+                Annihilation.getInstance().getLogger().info(Annihilation._l("success.map.loaded", ImmutableMap.of("map", mapName)));
             }
         } catch (Exception e) {
-            //TODO print out unable to load map mapName
+            Annihilation.getInstance().getLogger().info(Annihilation._l("errors.map.unable_to_load", ImmutableMap.of("map", mapName)));
             e.printStackTrace();
         }
     }
@@ -64,7 +66,7 @@ public class MapManager {
                 }
             }
         } else {
-            Annihilation.getInstance().getLogger().info("unable to find any maps!"); //TODO locale
+            Annihilation.getInstance().getLogger().info(Annihilation._l("errors.map.no_maps"));
         }
     }
 
@@ -91,9 +93,9 @@ public class MapManager {
             if (code == MapErrorCode.OK) {
                 map.save();
                 MapStatistics.getStatistics(map);
-            } else {
-                return code;
+
             }
+            return code;
         }
         return null;
     }

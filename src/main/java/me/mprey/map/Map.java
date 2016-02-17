@@ -92,7 +92,7 @@ public class Map implements ConfigurationSerializable {
         if (name == null || name.isEmpty()) {
             return MapErrorCode.MAP_NAME_NULL;
         } else if (mapArea == null || !mapArea.isValid()) {
-            return MapErrorCode.MAP_REGION_NULL;
+            return MapErrorCode.MAP_REGION_ERROR;
         } else if (lobby == null) {
             return MapErrorCode.MAP_LOBBY_NULL;
         } else if (red == null || !red.check()) {

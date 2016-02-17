@@ -8,7 +8,7 @@ import net.md_5.bungee.api.ChatColor;
 public class ChatWriter {
 
     public static String write(String input) {
-        return ChatColor.translateAlternateColorCodes('&', Annihilation.getInstance().getConfig().getString("chat_prefix", "[Annihilation]]")) + " " + ChatColor.WHITE;
+        return ChatColor.translateAlternateColorCodes('&', Annihilation.getInstance().getConfig().getString("chat_prefix", "[Annihilation]]")) + " " + ChatColor.WHITE + input;
     }
 
 }

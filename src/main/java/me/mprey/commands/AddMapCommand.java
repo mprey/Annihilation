@@ -1,6 +1,8 @@
 package me.mprey.commands;
 
+import com.google.common.collect.ImmutableMap;
 import me.mprey.Annihilation;
+import me.mprey.ChatWriter;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
@@ -19,15 +21,15 @@ public class AddMapCommand extends BaseCommand {
     }
 
     public String getPermission() {
-        return "setup";
+        return "addmap";
     }
 
     public String getName() {
-        return "addmap"; //TODO locale
+        return Annihilation._l("commands.addmap.name");
     }
 
     public String getDescription() {
-        return "adds a map"; //TODO locale
+        return Annihilation._l("commands.addmap.description");
     }
 
     public String[] getArguments() {
@@ -39,17 +41,17 @@ public class AddMapCommand extends BaseCommand {
     }
 
     public String getUsage() {
-        return "/anni addmap {mapname}"; //TODO locale
+        return Annihilation._l("commands.addmap.usage");
     }
 
     public boolean execute(CommandSender sender, ArrayList<String> args) {
         String map = args.get(0);
         if (getInstance().getMapManager().isMap(map)) {
-            sender.sendMessage("MAP EXISTS!"); //TODO locale
+            sender.sendMessage(ChatWriter.write(Annihilation._l("errors.map.already_exists", ImmutableMap.of("map", map))));
             return false;
         } else {
             getInstance().getMapManager().addMap(map);
-            sender.sendMessage("added map " + map + "! YA"); //TODO locale
+            sender.sendMessage(ChatWriter.write(Annihilation._l("success.map.added", ImmutableMap.of("map", map))));
         }
         return true;
     }
