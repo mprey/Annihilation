@@ -1,8 +1,9 @@
-package me.mprey.commands;
+package me.mprey.commands.map;
 
 import com.google.common.collect.ImmutableMap;
 import me.mprey.Annihilation;
 import me.mprey.ChatWriter;
+import me.mprey.commands.MapCommand;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
@@ -10,26 +11,14 @@ import java.util.ArrayList;
 /**
  * Created by Mason Prey on 2/14/16.
  */
-public class AddMapCommand extends BaseCommand {
+public class MapCreateCommand extends MapCommand {
 
-    public AddMapCommand(Annihilation instance) {
+    public MapCreateCommand(Annihilation instance) {
         super(instance);
     }
 
     public String getCommand() {
-        return "addmap";
-    }
-
-    public String getPermission() {
-        return "addmap";
-    }
-
-    public String getName() {
-        return Annihilation._l("commands.addmap.name");
-    }
-
-    public String getDescription() {
-        return Annihilation._l("commands.addmap.description");
+        return "create";
     }
 
     public String[] getArguments() {
@@ -40,8 +29,16 @@ public class AddMapCommand extends BaseCommand {
         return true;
     }
 
+    public String getName() {
+        return Annihilation._l("commands.map." + getCommand() + ".name");
+    }
+
+    public String getDescription() {
+        return Annihilation._l("commands.map." + getCommand() + ".description");
+    }
+
     public String getUsage() {
-        return Annihilation._l("commands.addmap.usage");
+        return Annihilation._l("commands.map." + getCommand() + ".usage");
     }
 
     public boolean execute(CommandSender sender, ArrayList<String> args) {

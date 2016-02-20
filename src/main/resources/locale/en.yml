@@ -13,33 +13,62 @@ errors:
     blue_location_error: 'Blue locations are invalid'
     yellow_location_error: 'Yellow locations are invalid'
     green_location_error: 'Green locations are invalid'
+
   commands:
     no_permission: '&cYou do not have permission!'
     no_console: '&cConsoles cannot use this command.'
     invalid_args: 'Invalid arguments! Usage: $usage$'
+    unknown_command: '&4Unknown command. Type /anni help for help.'
 
   locale:
     not_found: 'Unable to locate locale $locale$! Defaulting to fallback locale.'
+
+  syntax:
+    not_number: 'Input $input$ is not a number. Please retry.'
+    min_max: 'You must specify point min or point max'
 
 success:
   map:
     added: '&4Added map $map$!'
     loaded: 'Loaded map $map$ successfully.'
     saved: 'Successfully saved map $map$!'
+    set_lobby: 'Set lobby at foot block successfully.'
+    added_diamond: 'Added diamond at foot location.'
+    set_name: 'Changed name of map $map$ to $new_name$'
+    set_max_point: 'Successfully set the maximum point.'
+    set_min_point: 'Successfully set the minimum point.'
   regen_blocks:
     loaded: 'Loaded regenerating block type $structure$!'
   locale:
     loaded: 'Successfully loaded locale $locale$!'
 commands:
-  addmap:
-    name: 'addmap'
-    usage: '/anni addmap {mapname}'
-    description: 'Add a map to the map pool'
-  save:
-    name: 'save'
-    usage: '/anni save {mapname}'
-    description: 'Save a map to file'
+  map:
+    name: 'map'
+    usage: '/anni map {args}'
+    description: 'Base map commands'
+    create:
+      name: 'create'
+      usage: '/anni map create {mapname}'
+      description: 'Create a new map'
+    save:
+      name: 'save'
+      usage: '/anni map save {mapname}'
+      description: 'Save a map to file'
+    set:
+      name: 'set'
+      usage: '/anni map set {args}'
+      description: 'Set map properties'
+      lobby:
+        name: 'lobby'
+        usage: '/anni map set lobby {mapname}'
+        description: 'Set the lobby spawn point for a map'
+  help:
+    name: 'help'
+    usage: '/anni help [page]'
+    description: 'Help page for Annihilation'
 shop:
   lore: '&5Price: $price$ gold'
+  weapons_title: 'Weapon Shop'
+  potions_title: 'Potion Shop'
 extra:
   enable_time: 'Took $time$ miliseconds to enable Annihilation!'

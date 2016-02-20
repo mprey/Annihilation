@@ -1,35 +1,17 @@
 package me.mprey;
 
 import com.google.common.collect.ImmutableMap;
-import me.mprey.commands.AddMapCommand;
+import me.mprey.commands.map.MapCreateCommand;
 import me.mprey.commands.CommandManager;
-import me.mprey.commands.SaveMapCommand;
+import me.mprey.commands.map.MapSaveCommand;
 import me.mprey.database.DatabaseManager;
-import me.mprey.database.YamlManager;
 import me.mprey.localization.LocalizationConfig;
 import me.mprey.map.MapManager;
-import me.mprey.regen.RegeneratingBlock;
-import me.mprey.regen.RegeneratingBlockEffect;
 import me.mprey.regen.RegeneratingBlockManager;
-import me.mprey.regen.RegeneratingBlockStructure;
 import me.mprey.util.ConfigUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.xml.sax.DTDHandler;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 /**
  * Created by Mason Prey on 2/6/16.
@@ -59,7 +41,7 @@ public class Annihilation extends JavaPlugin {
         this.mapManager = new MapManager();
         this.mapManager.loadMaps();
 
-        this.getCommand("annihilation").setExecutor(new CommandManager(new AddMapCommand(this), new SaveMapCommand(this)));
+        this.getCommand("annihilation").setExecutor(new CommandManager(new MapCreateCommand(this), new MapSaveCommand(this)));
 
         //TODO check if bungee
         /*

@@ -66,21 +66,21 @@ public class TeamLocation implements ConfigurationSerializable {
     }
 
     public boolean check() {
-        return nexus != null && nexus.isValid() &&
-                spawns != null && spawns.size() > 0 &&
-                enderFurnace != null &&
-                enderBrewer != null &&
-                enderChest != null;
+        return getNexus().isValid() &&
+                getSpawns().size() > 0 &&
+                getEnderFurnace() != null &&
+                getEnderBrewer() != null &&
+                getEnderChest() != null;
     }
 
     public Map<String, Object> serialize() {
         Map<String, Object> serialize = new HashMap<>();
 
-        serialize.put("region", this.nexus.serialize());
-        serialize.put("spawns", ConfigUtil.serializeLocationArray(spawns));
-        serialize.put("ender_furnace", ConfigUtil.serializeLocation(enderFurnace));
-        serialize.put("ender_brewer", ConfigUtil.serializeLocation(enderFurnace));
-        serialize.put("ender_chest", ConfigUtil.serializeLocation(enderChest));
+        serialize.put("region", getNexus().serialize());
+        serialize.put("spawns", ConfigUtil.serializeLocationArray(getSpawns()));
+        serialize.put("ender_furnace", ConfigUtil.serializeLocation(getEnderFurnace()));
+        serialize.put("ender_brewer", ConfigUtil.serializeLocation(getEnderBrewer()));
+        serialize.put("ender_chest", ConfigUtil.serializeLocation(getEnderChest()));
 
         return null;
     }

@@ -24,7 +24,7 @@ public class CommandManager implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length < 1) {
-            sender.sendMessage("/anni help");
+            sender.sendMessage(ChatWriter.write(Annihilation._l("errors.commands.unknown_command")));
             return true;
         }
         String command = args[0];
@@ -41,7 +41,7 @@ public class CommandManager implements CommandExecutor {
                 return baseCommand.execute(sender, argList);
             }
         }
-        sender.sendMessage("/anni help");
+        sender.sendMessage(ChatWriter.write(Annihilation._l("errors.commands.unknown_command")));
         return false;
     }
 }
