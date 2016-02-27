@@ -2,6 +2,7 @@ package me.mprey.game;
 
 import me.mprey.map.Region;
 import me.mprey.util.ConfigUtil;
+import me.mprey.util.GameUtil;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
@@ -71,6 +72,10 @@ public class TeamLocation implements ConfigurationSerializable {
                 getEnderFurnace() != null &&
                 getEnderBrewer() != null &&
                 getEnderChest() != null;
+    }
+
+    public String toString() {
+        return "{nexus_region=" + getNexus().toString() + ", spawns=" + GameUtil.arrayToString(getSpawns()) + ", ender_furnace=" + GameUtil.locationToString(enderFurnace) + ", ender_brewer=" + GameUtil.locationToString(enderBrewer) + ", ender_chest=" + GameUtil.locationToString(enderChest) + "}";
     }
 
     public Map<String, Object> serialize() {

@@ -1,6 +1,7 @@
 package me.mprey.map;
 
 import me.mprey.util.ConfigUtil;
+import me.mprey.util.GameUtil;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -76,6 +77,10 @@ public class Region implements ConfigurationSerializable {
 
     public boolean isValid() {
         return maxCorner != null && minCorner != null && maxCorner.getWorld().getName().equals(minCorner.getWorld().getName());
+    }
+
+    public String toString() {
+        return "{loc1=" + GameUtil.locationToString(minCorner) + ", loc2=" + GameUtil.locationToString(maxCorner) +"}";
     }
 
     public Map<String, Object> serialize() {

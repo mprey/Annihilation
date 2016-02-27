@@ -27,6 +27,9 @@ errors:
     not_number: 'Input $input$ is not a number. Please retry.'
     min_max: 'You must specify point min or point max'
 
+  main_lobby:
+    not_enabled: '&eThe main lobby has not been enabled. Please change the value in the settings.'
+
 success:
   map:
     added: '&4Added map $map$!'
@@ -66,9 +69,85 @@ commands:
     name: 'help'
     usage: '/anni help [page]'
     description: 'Help page for Annihilation'
+
 shop:
   lore: '&5Price: $price$ gold'
   weapons_title: 'Weapon Shop'
   potions_title: 'Potion Shop'
+
+editor:
+  main:
+    inventory_name: '&cAnnihilation Editor GUI'
+  maps:
+    inventory_name: '&cMaps Editor GUI'
+  settings:
+    inventory_name: '&cSettings Editor GUI'
+  main_lobby:
+    inventory_name: '&cMain Lobby Editor GUI'
+  map_creator:
+    inventory_name: '&cMap Creator GUI'
+  confirmation:
+    inventory_name: '&fConfirmation'
+  map_editor:
+    inventory_name: '$map$ Editor'
+  icons:
+    settings_icon:
+      name: '&cSettings Editor'
+      lore:
+        - ''
+        - '&fClick here to edit the settings.'
+        - ''
+    map_icon: # NAME NOT AVAILABLE TO CHANGE
+      lore:
+        - ''
+        - '&fworld: $world$'
+        - '&fgreen: $green$'
+        - '&fyellow: $yellow$'
+        - '&fred: $red$'
+        - '&fblue: $blue$'
+        - '&flobby: $lobby$'
+        - '&fdiamonds: $diamonds$'
+        - ''
+    available_map_icon:
+      name: '&c$name$'
+      lore:
+        - ''
+        - '&fClick here to create map $name$.'
+        - ''
+    maps_icon:
+      name: '&cMaps Editor'
+      lore:
+        - ''
+        - '&fClick here to edit the maps.'
+        - ''
+    main_lobby_icon:
+      name: '&cMain Lobby Editor'
+      lore:
+        - ''
+        - '&fClick here to edit the main lobby.'
+        - ''
+    return_icon:
+      name: '&e<-- Go Back'
+      lore:
+        - ''
+        - '&fClick here to go back to the previous page.'
+        - ''
+    new_map_icon:
+      name: '&cAdd a new map'
+      lore:
+        - ''
+        - '&fClick here to add a new map.'
+        - ''
+    confirm_sign:
+      lore:
+        - ''
+        - '&cClick on the green to accept or the red to deny.'
+        - ''
+    confirm_green: # LORE NOT AVAILABLE TO CHANGE
+      name: '&aACCEPT'
+    confirm_red: # LORE NOT AVAILABE TO CHANGE
+      name: '&cCANCEL'
+
+
 extra:
   enable_time: 'Took $time$ miliseconds to enable Annihilation!'

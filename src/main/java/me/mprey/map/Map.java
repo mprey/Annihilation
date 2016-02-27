@@ -3,7 +3,9 @@ package me.mprey.map;
 import me.mprey.Annihilation;
 import me.mprey.game.TeamLocation;
 import me.mprey.util.ConfigUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -19,16 +21,15 @@ import java.util.List;
 public class Map implements ConfigurationSerializable {
 
     private String name;
-    private Region mapArea;
+    private World world;
     private TeamLocation green, yellow, red, blue;
     private Location lobby;
     private List<Location> diamonds;
 
-    public Map(String name, Region mapArea, Location lobby, TeamLocation red, TeamLocation green, TeamLocation yellow, TeamLocation blue, List<Location> diamonds) {
+    public Map(String name, Location lobby, TeamLocation red, TeamLocation green, TeamLocation yellow, TeamLocation blue, List<Location> diamonds) {
         this.name = name;
         this.lobby = lobby;
         this.red = red;
-        this.mapArea = mapArea;
         this.green = green;
         this.yellow = yellow;
         this.blue = blue;
@@ -42,7 +43,6 @@ public class Map implements ConfigurationSerializable {
     public Map(FileConfiguration config) throws Exception {
         this.name = config.getString("name");
         this.lobby = ConfigUtil.deserializeLocation(config.get("lobby"));
-        this.mapArea = new Region(config.getConfigurationSection("region").getValues(false));
         this.red = new TeamLocation(config.getConfigurationSection("team_red").getValues(false));
         this.yellow = new TeamLocation(config.getConfigurationSection("team_yellow").getValues(false));
         this.green = new TeamLocation(config.getConfigurationSection("team_green").getValues(false));
@@ -97,11 +97,19 @@ public class Map implements ConfigurationSerializable {
         return green;
     }
 
-    public Region getMapArea() {
-        if (mapArea == null) {
-            mapArea = new Region(null, null);
+    public World getWorld() {
+        if (this.world == null) {
+            loadWorld();
         }
-        return mapArea;
+        return this.world;
+    }
+
+    public boolean isWorldCopied() {
+        return Bukkit.getServer().getWorld(this.name) != null;
+    }
+
+    public void loadWorld() {
+        this.world = Bukkit.getServer().getWorld(name);
     }
 
     public Location getLobby() {
@@ -115,8 +123,6 @@ public class Map implements ConfigurationSerializable {
     public MapErrorCode checkMap() {
         if (getName() == null || getName().isEmpty()) {
             return MapErrorCode.MAP_NAME_NULL;
-        } else if (!getMapArea().isValid()) {
-            return MapErrorCode.MAP_REGION_ERROR;
         } else if (getLobby() == null) {
             return MapErrorCode.MAP_LOBBY_NULL;
         } else if (!getRedTeamLocation().check()) {
@@ -129,6 +135,10 @@ public class Map implements ConfigurationSerializable {
             return MapErrorCode.GREEN_LOCATION_ERROR;
         }
         return MapErrorCode.OK;
+    }
+
+    public boolean isValid() {
+        return checkMap() == MapErrorCode.OK;
     }
 
     public void save() {
@@ -161,7 +171,6 @@ public class Map implements ConfigurationSerializable {
         java.util.Map<String, Object> serialize = new HashMap<>();
 
         serialize.put("name", getName());
-        serialize.put("region", getMapArea().serialize());
         serialize.put("lobby", ConfigUtil.serializeLocation(getLobby()));
         serialize.put("team_red", getRedTeamLocation().serialize());
         serialize.put("team_blue", getBlueTeamLocation().serialize());

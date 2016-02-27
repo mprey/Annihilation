@@ -58,11 +58,8 @@ public class MapManager {
         });
         if (subFiles.length > 0) {
             for (File mapDirectory : subFiles) {
-                File[] sub = mapDirectory.listFiles();
-                for (File cfg : sub) {
-                    if (cfg.isFile() && cfg.getName().equals(MAP_FILE)) {
-                        loadMap(cfg);
-                    }
+                if (isMapDir(mapDirectory)) {
+                    loadMap(new File(mapDirectory, MAP_FILE));
                 }
             }
         } else {
@@ -79,7 +76,6 @@ public class MapManager {
     }
 
     public void removeMap(Map map) {
-        //TODO check if map is being used
         mapList.remove(map);
         File mapDir = new File(Annihilation.getInstance().getDataFolder() + File.separator + MAP_DIR + File.separator + map.getName());
         if (mapDir.exists()) {
@@ -116,6 +112,34 @@ public class MapManager {
         return null;
     }
 
+    public List<String> getAvailableMaps() {
+        File mapDir = new File(Annihilation.getInstance().getDataFolder() + File.separator + MAP_DIR);
+        File[] sub = mapDir.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.isDirectory();
+            }
+        });
+        List<String> available = new ArrayList<>();
+        for (File subDirectory : sub) {
+            if (!isMapDir(subDirectory)) {
+                available.add(subDirectory.getName());
+            }
+        }
+        return available;
+    }
+
+    public boolean isMapDir(File file) {
+        if (file.exists() && file.isDirectory()) {
+            for (File cfg : file.listFiles()) {
+                if (cfg.isFile() && cfg.getName().equals(MAP_FILE)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public boolean isMap(String name) {
         return getMap(name) != null;
     }
@@ -142,9 +166,7 @@ public class MapManager {
             }
             List<Map> list = new ArrayList<>(valid.size());
             for (Map m : valid) {
-                if (m.checkMap() == MapErrorCode.OK) {
-                    list.add(m);
-                }
+                list.add(m);
             }
             Collections.shuffle(list);
 

@@ -7,6 +7,8 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -102,6 +104,32 @@ public class LocalizationConfig extends YamlConfiguration {
             return this.fallback.getString(path);
         }
         return ChatColor.translateAlternateColorCodes('&', super.getString(path));
+    }
+
+    public List<String> getStringList(String path) {
+        if (super.getStringList(path) == null) {
+            if (this.fallback == null) {
+                return Arrays.asList("LOCALE_NOT_FOUND");
+            }
+            return this.fallback.getStringList(path);
+        }
+        List<String> translated = super.getStringList(path);
+        for (int i = 0; i < translated.size(); i++) {
+            String s = translated.remove(i);
+            s = ChatColor.translateAlternateColorCodes('&', s);
+            translated.add(i, s);
+        }
+        return translated;
+    }
+
+    public List<String> getStringList(String path, Map<String, String> params) {
+        List<String> stringList = this.getStringList(path);
+        for (int i = 0; i < stringList.size(); i++) {
+            for (String key : params.keySet()) {
+                stringList.add(i, stringList.remove(i).replace("$" + key.toLowerCase() + "$", params.get(key)));
+            }
+        }
+        return stringList;
     }
 
     public String getFormatString(String path, Map<String, String> params) {

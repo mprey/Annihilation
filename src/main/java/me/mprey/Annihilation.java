@@ -1,6 +1,8 @@
 package me.mprey;
 
 import com.google.common.collect.ImmutableMap;
+import me.mprey.commands.GUICommand;
+import me.mprey.commands.MapCommand;
 import me.mprey.commands.map.MapCreateCommand;
 import me.mprey.commands.CommandManager;
 import me.mprey.commands.map.MapSaveCommand;
@@ -11,6 +13,7 @@ import me.mprey.regen.RegeneratingBlockManager;
 import me.mprey.util.ConfigUtil;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,7 +44,7 @@ public class Annihilation extends JavaPlugin {
         this.mapManager = new MapManager();
         this.mapManager.loadMaps();
 
-        this.getCommand("annihilation").setExecutor(new CommandManager(new MapCreateCommand(this), new MapSaveCommand(this)));
+        this.getCommand("annihilation").setExecutor(new CommandManager(new GUICommand(this), new MapCommand(this, new MapCreateCommand(this))));
 
         //TODO check if bungee
         /*
@@ -108,6 +111,14 @@ public class Annihilation extends JavaPlugin {
 
     public static String _l(String localeKey) {
         return (String) Annihilation.getInstance().getLocalization().get(localeKey);
+    }
+
+    public static List<String> _ls(String localeKey) {
+        return Annihilation.getInstance().getLocalization().getStringList(localeKey);
+    }
+
+    public static List<String> _ls(String localeKey, Map<String, String> params) {
+        return Annihilation.getInstance().getLocalization().getStringList(localeKey, params);
     }
 
     public static Annihilation getInstance() {
