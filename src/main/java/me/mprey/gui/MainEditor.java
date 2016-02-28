@@ -23,14 +23,10 @@ public class MainEditor extends IconGUI {
             public void onOptionClick(IconMenu.OptionClickEvent event) {
                 event.setWillClose(false);
                 if (event.getPosition() == 0) {
-                    //TODO open settings menu
+                    new SettingsEditor(getUser()).openGUI();
                 } else if (event.getPosition() == 4) {
-                    if (event.getItem().getAmount() == 0) {
-                        getUser().sendMessage(ChatWriter.write(Annihilation._l("errors.main_lobby.not_enabled")));
-                        event.setWillClose(true);
-                    } else {
-                        getUser().sendMessage("opening main lobby editor!");
-                    }
+                    getUser().sendMessage("opening lobby editor!");
+                    event.setWillClose(true);
                 } else if (event.getPosition() == 8) {
                     new MapsEditor(getUser()).openGUI();
                 }
@@ -41,17 +37,8 @@ public class MainEditor extends IconGUI {
 
     public IconMenu populate(IconMenu menu) {
         ItemStack settingsIcon = ItemUtil.nameAndLore(new ItemStack(Material.NAME_TAG, 1), Annihilation._l("editor.icons.settings_icon.name"), Annihilation._ls("editor.icons.settings_icon.lore"));
-        ItemStack mainLobbyIcon = ItemUtil.nameAndLore(new ItemStack(Material.BED), Annihilation._l("editor.icons.main_lobby_icon.name"), Annihilation._ls("editor.icons.main_lobby_icon.lore"));
+        ItemStack mainLobbyIcon = ItemUtil.nameAndLore(new ItemStack(Material.BED), Annihilation._l("editor.icons.lobby_editor.name"), Annihilation._ls("editor.icons.lobby_editor.lore"));
         ItemStack mapIcon = ItemUtil.nameAndLore(new ItemStack(Material.MAP), Annihilation._l("editor.icons.maps_icon.name"), Annihilation._ls("editor.icons.maps_icon.lore"));
-
-        if (Annihilation.getInstance().getConfig().getBoolean("main_lobby.enabled")) {
-            mainLobbyIcon.setAmount(1);
-        } else {
-            mainLobbyIcon.setAmount(0);
-        }
-
-        mapIcon.setAmount(Annihilation.getInstance().getMapManager().getMapList().size());
-        settingsIcon.setAmount(1);
 
         menu.setOption(0, settingsIcon).setOption(4, mainLobbyIcon).setOption(8, mapIcon).fillBlank(new ItemStack(Material.IRON_FENCE));
         return menu;

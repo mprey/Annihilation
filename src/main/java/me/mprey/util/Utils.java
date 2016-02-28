@@ -1,5 +1,6 @@
 package me.mprey.util;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -54,6 +55,10 @@ public class Utils {
         } else {
             return new int[] {Integer.parseInt(input)};
         }
+    }
+
+    public static String capitalize(String input) {
+        return WordUtils.capitalizeFully(input);
     }
 
 

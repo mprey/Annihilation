@@ -2,27 +2,35 @@ package me.mprey.gui;
 
 import com.google.common.collect.ImmutableMap;
 import me.mprey.Annihilation;
+import me.mprey.game.Ender;
+import me.mprey.game.TeamColor;
 import me.mprey.map.Map;
 import me.mprey.util.IconMenu;
+import me.mprey.util.ItemUtil;
+import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Created by Mason Prey on 2/26/16.
  */
 public class MapEditor extends IconGUI {
 
-    private Map map;
+    private final Map map;
 
     public MapEditor(Player player, Map map) {
         super(player);
         this.map = map;
     }
 
-    //SLOT 38 - save map
+    //SLOT 2 - load world (grass block)
+    //SLOT 6 - teleport to world
+    //SLOT 19, 21, 23, 25 team editors
+    //SLOT 38 - lobby editor
+    //SLOT 39 - diamonds editor
+    //SLOT 41 - save map
     //SLOT 42 - delete map
-
-    //SLOT 19,20,21,22,23,24,25 red,blue,green,yellow,furnace,chest,brewer
-    //SLOT 13 teleport to world
 
     public IconMenu createMenu() {
         return new IconMenu(getName(), getSize(), new IconMenu.OptionClickEventHandler() {
@@ -31,11 +39,43 @@ public class MapEditor extends IconGUI {
                 event.setWillClose(false);
                 if (event.getPosition() == 45) {
                     new MapsEditor(getUser()).openGUI();
+                } else if (event.getPosition() == 2) {
+                    //TODO load world of map if not loaded
+                } else if (event.getPosition() == 6) {
+                    //TODO check if loaded, if so teleport to world
+                } else if (event.getPosition() == 38) {
+                    //TODO open lobby editor
+                } else if (event.getPosition() == 41) {
+                    new Confirmation(getUser(), Annihilation._l("confirm.save_map", ImmutableMap.of("map", map.getName())), "anni map save " + map.getName(), new MapEditor(getUser(), map)).openGUI();
+                } else if (event.getPosition() == 42) {
+                    new Confirmation(getUser(), Annihilation._l("confirm.delete_map", ImmutableMap.of("map", map.getName())), "anni map delete " + map.getName(), new MapEditor(getUser(), map)).openGUI();
+                } else if (event.getPosition() == 19) {
+                    new TeamEditor(getUser(), map, TeamColor.GREEN).openGUI();
+                } else if (event.getPosition() == 21) {
+                    new TeamEditor(getUser(), map, TeamColor.YELLOW).openGUI();
+                } else if (event.getPosition() == 23) {
+                    new TeamEditor(getUser(), map, TeamColor.RED).openGUI();
+                } else if (event.getPosition() == 25) {
+                    new TeamEditor(getUser(), map, TeamColor.BLUE).openGUI();
                 }
             }
 
         }, Annihilation.getInstance())
-                .setOption(45, getReturnIcon());
+                .setOption(45, getReturnIcon())
+                .setOption(19, getTeamEditorBlock(TeamColor.GREEN))
+                .setOption(21, getTeamEditorBlock(TeamColor.YELLOW))
+                .setOption(23, getTeamEditorBlock(TeamColor.RED))
+                .setOption(25, getTeamEditorBlock(TeamColor.BLUE))
+                .setOption(2, ItemUtil.nameAndLore(Material.GRASS, Annihilation._l("editor.icons.world_loader.name"), Annihilation._ls("editor.icons.world_loader.lore")))
+                .setOption(38, ItemUtil.nameAndLore(Material.STRING, Annihilation._l("editor.icons.lobby_editor.name"), Annihilation._ls("editor.icons.lobby_editor.lore")))
+                .setRemoveableOption(39, ItemUtil.nameAndLore(Material.DIAMOND_ORE, Annihilation._l("editor.icons.diamond_icon.name"), Annihilation._ls("editor.icons.diamond_icon.lore")))
+                .setOption(6, ItemUtil.nameAndLore(Material.ENDER_PEARL, Annihilation._l("editor.icons.teleport_icon.name"), Annihilation._ls("editor.icons.teleport_icon.lore")))
+                .setOption(41, ItemUtil.nameAndLore(Material.EMERALD_BLOCK, Annihilation._l("editor.icons.save_icon.name"), Annihilation._ls("editor.icons.save_icon.lore")))
+                .setOption(42, ItemUtil.nameAndLore(Material.REDSTONE_BLOCK, Annihilation._l("editor.icons.delete_icon.name"), Annihilation._ls("editor.icons.delete_icon.lore")));
+    }
+
+    public ItemStack getTeamEditorBlock(TeamColor color) {
+        return ItemUtil.nameAndLore(color.getBlock(), Annihilation._l("editor.icons.team_editor.name", ImmutableMap.of("team", color.toString())), Annihilation._ls("editor.icons.team_block.lore"));
     }
 
     public int getSize() {

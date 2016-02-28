@@ -3,8 +3,8 @@ package me.mprey;
 import com.google.common.collect.ImmutableMap;
 import me.mprey.commands.GUICommand;
 import me.mprey.commands.MapCommand;
-import me.mprey.commands.map.MapCreateCommand;
 import me.mprey.commands.CommandManager;
+import me.mprey.commands.map.MapDeleteCommand;
 import me.mprey.commands.map.MapSaveCommand;
 import me.mprey.database.DatabaseManager;
 import me.mprey.localization.LocalizationConfig;
@@ -44,14 +44,7 @@ public class Annihilation extends JavaPlugin {
         this.mapManager = new MapManager();
         this.mapManager.loadMaps();
 
-        this.getCommand("annihilation").setExecutor(new CommandManager(new GUICommand(this), new MapCommand(this, new MapCreateCommand(this))));
-
-        //TODO check if bungee
-        /*
-        if (Config#isBungee()) {
-            Game game = this.gameManager().startGame();
-        }
-         */
+        this.getCommand("annihilation").setExecutor(new CommandManager(new GUICommand(this), new MapCommand(this, new MapDeleteCommand(this), new MapSaveCommand(this))));
 
         long endTime = System.currentTimeMillis();
         getLogger().info(_l("extra.enable_time", ImmutableMap.of("time", "" + (endTime - startTime))));

@@ -9,6 +9,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -64,6 +65,7 @@ public class IconMenu implements Listener {
         for (int i = 0; i < optionIcons.length; i++) {
             if (optionIcons[i] == null) {
                 setOption(i, filler);
+                optionNames[i] = "filler";
             }
         }
     }
@@ -95,19 +97,21 @@ public class IconMenu implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
+    public void onInventoryClose(InventoryCloseEvent event) {
+        if (event.getInventory().getTitle().equals(name) && (player == null || event.getPlayer() == player)) {
+            destroy();
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
     void onInventoryClick(InventoryClickEvent event) {
         if (event.getInventory().getTitle().equals(name) && (player == null || event.getWhoClicked() == player)) {
-            if (event.getClick() != ClickType.LEFT) {
-                event.setCancelled(true);
-                return;
-            }
             int slot = event.getRawSlot();
             if (slot >= 0 && slot < size && optionNames[slot] != null) {
+                event.setCancelled(true);
                 Plugin plugin = this.plugin;
                 if (removeableIcons[slot]) {
-                    event.setCancelled(false);
-                    event.getClickedInventory().setItem(slot, optionIcons[slot]);
-                    return;
+                    event.setCursor(optionIcons[slot]);
                 }
                 OptionClickEvent e = new OptionClickEvent((Player) event.getWhoClicked(), slot, optionNames[slot], optionIcons[slot]);
                 handler.onOptionClick(e);

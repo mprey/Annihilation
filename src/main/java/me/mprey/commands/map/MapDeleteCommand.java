@@ -4,25 +4,23 @@ import com.google.common.collect.ImmutableMap;
 import me.mprey.Annihilation;
 import me.mprey.ChatWriter;
 import me.mprey.commands.MapCommand;
-import org.bukkit.Bukkit;
+import me.mprey.map.Map;
+import me.mprey.map.MapErrorCode;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
- * Created by Mason Prey on 2/14/16.
+ * Created by Mason Prey on 2/27/16.
  */
-public class MapCreateCommand extends MapCommand {
+public class MapDeleteCommand extends MapCommand {
 
-    public MapCreateCommand(Annihilation instance) {
+    public MapDeleteCommand(Annihilation instance) {
         super(instance);
     }
 
     public String getCommand() {
-        return "create";
+        return "delete";
     }
 
     public String[] getArguments() {
@@ -46,18 +44,15 @@ public class MapCreateCommand extends MapCommand {
     }
 
     public boolean execute(CommandSender sender, ArrayList<String> args) {
-        String map = args.get(0);
-        if (getInstance().getMapManager().isMap(map)) {
-            sender.sendMessage(ChatWriter.write(Annihilation._l("errors.map.already_exists", ImmutableMap.of("map", map))));
-            return false;
+        String input = args.get(0);
+        if (!getInstance().getMapManager().isMap(input)) {
+            sender.sendMessage(ChatWriter.write(Annihilation._l("errors.map.not_found", ImmutableMap.of("map", input))));
         } else {
-            File file = new File(Annihilation.getInstance().getServer().getWorldContainer().getAbsoluteFile(), map);
-            if (file.exists()) {
-                sender.sendMessage("exists");
-            } else {
-                sender.sendMessage("doesnt exist");
-            }
+            Map map = getInstance().getMapManager().getMap(input);
+            getInstance().getMapManager().removeMap(map);
+            sender.sendMessage(ChatWriter.write(Annihilation._l("success.map.deleted", ImmutableMap.of("map", map.getName()))));
         }
-        return true;
+        return false;
     }
+
 }

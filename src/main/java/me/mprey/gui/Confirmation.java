@@ -3,6 +3,7 @@ package me.mprey.gui;
 import me.mprey.Annihilation;
 import me.mprey.util.IconMenu;
 import me.mprey.util.ItemUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -12,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
  */
 public class Confirmation extends IconGUI {
 
-    private String prompt;
+    private String prompt, confirmCommand;
 
     private IconGUI confirmed, denied;
 
@@ -35,15 +36,30 @@ public class Confirmation extends IconGUI {
         this.denied = denied;
     }
 
+    public Confirmation(Player player, String prompt, String confirmCommand, IconGUI denied) {
+        super(player);
+        this.prompt = prompt;
+        this.confirmCommand = confirmCommand;
+        this.denied = denied;
+    }
+
     public IconMenu createMenu() {
         IconMenu menu =  new IconMenu(getName(), getSize(), new IconMenu.OptionClickEventHandler() {
 
             public void onOptionClick(IconMenu.OptionClickEvent event) {
                 event.setWillClose(false);
                 if (isConfirmed(event.getPosition())) {
-                    confirmed.openGUI();
+                    if (confirmed == null) {
+                        getUser().performCommand(confirmCommand);
+                        event.setWillDestroy(true);
+                        event.setWillClose(true);
+                    } else {
+                        confirmed.openGUI();
+                        event.setWillDestroy(true);
+                    }
                 } else if (isDenied(event.getPosition())) {
                     denied.openGUI();
+                    event.setWillDestroy(true);
                 }
             }
 

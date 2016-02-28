@@ -97,6 +97,7 @@ public class LocalizationConfig extends YamlConfiguration {
     }
 
     public String getString(String path) {
+        path = path.toLowerCase();
         if (super.get(path) == null) {
             if (this.fallback == null) {
                 return "LOCALE_NOT_FOUND";
@@ -107,6 +108,7 @@ public class LocalizationConfig extends YamlConfiguration {
     }
 
     public List<String> getStringList(String path) {
+        path = path.toLowerCase();
         if (super.getStringList(path) == null) {
             if (this.fallback == null) {
                 return Arrays.asList("LOCALE_NOT_FOUND");

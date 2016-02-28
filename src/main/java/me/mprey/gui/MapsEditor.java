@@ -7,6 +7,7 @@ import me.mprey.util.GameUtil;
 import me.mprey.util.IconMenu;
 import me.mprey.util.ItemUtil;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -38,7 +39,7 @@ public class MapsEditor extends IconGUI {
                 } else {
                     Map clicked = getClickedMap(event.getPosition());
                     if (clicked != null) {
-
+                        new MapEditor(getUser(), clicked).openGUI();
                     }
                 }
             }

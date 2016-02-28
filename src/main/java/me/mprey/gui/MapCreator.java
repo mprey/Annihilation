@@ -34,7 +34,7 @@ public class MapCreator extends IconGUI {
                     String worldName = getClickedWorld(event.getPosition());
                     if (worldName != null) {
                         if (Annihilation.getInstance().getMapManager().addMap(worldName)) {
-                            //TODO new MapEditor(getUser(), Annihilation.getInstance().getMapManager().getMap(worldName)).openGUI();
+                            new MapEditor(getUser(), Annihilation.getInstance().getMapManager().getMap(worldName)).openGUI();
                         } else {
                             getUser().sendMessage(ChatWriter.write(Annihilation._l("errors.map.already_exists", ImmutableMap.of("map", worldName))));
                             event.setWillClose(true);

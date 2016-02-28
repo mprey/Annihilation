@@ -5,6 +5,8 @@ import me.mprey.Annihilation;
 import me.mprey.game.TeamLocation;
 import me.mprey.stats.MapStatistics;
 import me.mprey.util.ConfigUtil;
+import me.mprey.util.Utils;
+import me.mprey.util.WorldUtil;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -29,18 +31,17 @@ public class MapManager {
         this.mapList = new ArrayList<>();
     }
 
-    private void loadMap(File configFile) {
+    private void loadMap(File configFile, String mapDir) {
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-        String mapName = config.getString("name");
         try {
             Map map = new Map(config);
             if (map != null) {
                 mapList.add(map);
                 MapStatistics.getStatistics(map);
-                Annihilation.getInstance().getLogger().info(Annihilation._l("success.map.loaded", ImmutableMap.of("map", mapName)));
+                Annihilation.getInstance().getLogger().info(Annihilation._l("success.map.loaded", ImmutableMap.of("map", mapDir)));
             }
         } catch (Exception e) {
-            Annihilation.getInstance().getLogger().info(Annihilation._l("errors.map.unable_to_load", ImmutableMap.of("map", mapName)));
+            Annihilation.getInstance().getLogger().info(Annihilation._l("errors.map.unable_to_load", ImmutableMap.of("map", mapDir)));
             e.printStackTrace();
         }
     }
@@ -59,7 +60,7 @@ public class MapManager {
         if (subFiles.length > 0) {
             for (File mapDirectory : subFiles) {
                 if (isMapDir(mapDirectory)) {
-                    loadMap(new File(mapDirectory, MAP_FILE));
+                    loadMap(new File(mapDirectory, MAP_FILE), mapDirectory.getName());
                 }
             }
         } else {
@@ -68,6 +69,7 @@ public class MapManager {
     }
 
     public boolean addMap(String map) {
+        map = Utils.capitalize(map);
         if (!isMap(map)) {
             mapList.add(new Map(map));
             return true;
@@ -117,7 +119,7 @@ public class MapManager {
         File[] sub = mapDir.listFiles(new FileFilter() {
             @Override
             public boolean accept(File pathname) {
-                return pathname.isDirectory();
+                return pathname.isDirectory() && !pathname.getName().equalsIgnoreCase("lobby");
             }
         });
         List<String> available = new ArrayList<>();

@@ -34,12 +34,14 @@ success:
   map:
     added: '&4Added map $map$!'
     loaded: 'Loaded map $map$ successfully.'
+    deleted: 'Deleted map $map$ successfully.'
     saved: 'Successfully saved map $map$!'
     set_lobby: 'Set lobby at foot block successfully.'
     added_diamond: 'Added diamond at foot location.'
     set_name: 'Changed name of map $map$ to $new_name$'
     set_max_point: 'Successfully set the maximum point.'
     set_min_point: 'Successfully set the minimum point.'
+    added_spawn: '&aAdded spawn for team $team$. Save the map to store the changes.'
   regen_blocks:
     loaded: 'Loaded regenerating block type $structure$!'
   locale:
@@ -57,14 +59,10 @@ commands:
       name: 'save'
       usage: '/anni map save {mapname}'
       description: 'Save a map to file'
-    set:
-      name: 'set'
-      usage: '/anni map set {args}'
-      description: 'Set map properties'
-      lobby:
-        name: 'lobby'
-        usage: '/anni map set lobby {mapname}'
-        description: 'Set the lobby spawn point for a map'
+    delete:
+      name: 'delete'
+      usage: '/anni map delete {mapname}'
+      description: 'Delete a map and all data.'
   help:
     name: 'help'
     usage: '/anni help [page]'
@@ -75,6 +73,16 @@ shop:
   weapons_title: 'Weapon Shop'
   potions_title: 'Potion Shop'
 
+game:
+  red_color: 'Red'
+  blue_color: 'Blue'
+  yellow_color: 'Yellow'
+  green_color: 'Green'
+  ender:
+    furnace: 'enderfurnace'
+    chest: 'enderchest'
+    brewer: 'enderbrewer'
+
 editor:
   main:
     inventory_name: '&cAnnihilation Editor GUI'
@@ -82,14 +90,16 @@ editor:
     inventory_name: '&cMaps Editor GUI'
   settings:
     inventory_name: '&cSettings Editor GUI'
-  main_lobby:
-    inventory_name: '&cMain Lobby Editor GUI'
+  lobby:
+    inventory_name: '&cLobby Editor GUI'
   map_creator:
     inventory_name: '&cMap Creator GUI'
   confirmation:
     inventory_name: '&fConfirmation'
   map_editor:
     inventory_name: '$map$ Editor'
+  team_editor:
+    inventory_name: '$map$ - $team$ Editor'
   icons:
     settings_icon:
       name: '&cSettings Editor'
@@ -100,7 +110,7 @@ editor:
     map_icon: # NAME NOT AVAILABLE TO CHANGE
       lore:
         - ''
-        - '&fworld: $world$'
+        - '&fworld_loaded: $world$'
         - '&fgreen: $green$'
         - '&fyellow: $yellow$'
         - '&fred: $red$'
@@ -119,12 +129,6 @@ editor:
       lore:
         - ''
         - '&fClick here to edit the maps.'
-        - ''
-    main_lobby_icon:
-      name: '&cMain Lobby Editor'
-      lore:
-        - ''
-        - '&fClick here to edit the main lobby.'
         - ''
     return_icon:
       name: '&e<-- Go Back'
@@ -147,7 +151,86 @@ editor:
       name: '&aACCEPT'
     confirm_red: # LORE NOT AVAILABE TO CHANGE
       name: '&cCANCEL'
-
-
+    spawn_block:
+      name: '$team$ Spawn Block'
+      lore:
+        - ''
+        - '&fClick here to take a spawn block.'
+        - ''
+        - '&aTo use the spawn block,'
+        - '&aplace the block where you want a spawn'
+        - '&ato be added and the spawn will be'
+        - '&aautomatically set at that location.'
+        - ''
+        - '&cDo not forget to save the map once completed.'
+        - ''
+    diamond_icon:
+      name: '&bDiamonds Block'
+      lore:
+        - ''
+        - '&fClick here to take the diamond block.'
+        - ''
+        - '&aTo use the diamond block,'
+        - '&aleft-click on pre-existing'
+        - '&adiamonds with the block to'
+        - '&asave the location of the diamond.'
+        - ''
+    ender_block:
+      name: '$type$ Block'
+      lore:
+        - ''
+        - '&fClick here to take the ender block.'
+        - ''
+        - '&aTo use the ender block,'
+        - '&aleft-click on the same block'
+        - '&atype on the map to create a '
+        - '&aa new ender block of that type.'
+        - ''
+    teleport_icon:
+      name: '&aTeleport to World'
+      lore:
+        - ''
+        - '&fClick here to teleport'
+        - '&fto the map world.'
+        - ''
+    save_icon:
+      name: '&aSave Map'
+      lore:
+        - ''
+        - '&fClick here to save'
+        - '&fthe map data to file.'
+        - ''
+    team_editor:
+      name: '&f$team$ Editor'
+      lore:
+        - ''
+        - '&aClick here to edit'
+        - '&athe team''s data.' # USE '' TO ESCAPE SINGLE QUOTES
+        - ''
+    delete_icon:
+      name: '&cDelete Map'
+      lore:
+        - ''
+        - '&fClick here to delete'
+        - '&fthe map and all saved data.'
+        - ''
+        - '&cWARNING: CANNOT UNDO'
+        - ''
+    world_loader:
+      name: '&aLoad World'
+      lore:
+        - ''
+        - '&fClick here to load'
+        - '&fthe map world.'
+        - ''
+    lobby_editor:
+      name: '&aLobby Editor'
+      lore:
+        - ''
+        - '&fClick here to edit the lobby.'
+        - ''
+confirm:
+  save_map: 'Are you sure you want to save map $map$?'
+  delete_map: 'Are you sure you want to delete map $map$?'
 extra:
   enable_time: 'Took $time$ miliseconds to enable Annihilation!'
