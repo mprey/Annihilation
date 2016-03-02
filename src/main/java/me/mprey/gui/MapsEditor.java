@@ -75,7 +75,6 @@ public class MapsEditor extends IconGUI {
                     .put("blue", map.getBlueTeamLocation().toString())
                     .put("yellow", map.getYellowTeamLocation().toString())
                     .put("diamonds", GameUtil.arrayToString(map.getDiamonds()))
-                    .put("lobby", GameUtil.locationToString(map.getLobby()))
                     .build());
 
             mapSlots.put(slot, map);

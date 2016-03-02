@@ -7,6 +7,8 @@ import me.mprey.commands.CommandManager;
 import me.mprey.commands.map.MapDeleteCommand;
 import me.mprey.commands.map.MapSaveCommand;
 import me.mprey.database.DatabaseManager;
+import me.mprey.game.Ender;
+import me.mprey.listener.MapCreatorListener;
 import me.mprey.localization.LocalizationConfig;
 import me.mprey.map.MapManager;
 import me.mprey.regen.RegeneratingBlockManager;
@@ -40,9 +42,12 @@ public class Annihilation extends JavaPlugin {
         this.initLocalization();
         this.initRegeneratingBlocksManager();
         this.initDatabaseManager();
+        this.initListeners();
 
         this.mapManager = new MapManager();
         this.mapManager.loadMaps();
+
+        new Ender(this);
 
         this.getCommand("annihilation").setExecutor(new CommandManager(new GUICommand(this), new MapCommand(this, new MapDeleteCommand(this), new MapSaveCommand(this))));
 
@@ -91,6 +96,10 @@ public class Annihilation extends JavaPlugin {
             this.localization.loadLocale(FALLBACK_LOCALE, false);
             this.getLogger().info(Annihilation._l("errors.locale.not_found", ImmutableMap.of("locale", locale)));
         }
+    }
+
+    private void initListeners() {
+        new MapCreatorListener();
     }
 
     public void reloadLocalization() {

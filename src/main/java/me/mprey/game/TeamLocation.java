@@ -66,6 +66,10 @@ public class TeamLocation implements ConfigurationSerializable {
         return spawns;
     }
 
+    public void addSpawn(Location location) {
+        getSpawns().add(location);
+    }
+
     public boolean check() {
         return getNexus().isValid() &&
                 getSpawns().size() > 0 &&

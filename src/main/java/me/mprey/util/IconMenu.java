@@ -61,13 +61,14 @@ public class IconMenu implements Listener {
         return this;
     }
 
-    public void fillBlank(ItemStack filler) {
+    public IconMenu fillBlank(ItemStack filler) {
         for (int i = 0; i < optionIcons.length; i++) {
             if (optionIcons[i] == null) {
                 setOption(i, filler);
                 optionNames[i] = "filler";
             }
         }
+        return this;
     }
 
     public void setSpecificTo(Player player) {
@@ -111,16 +112,25 @@ public class IconMenu implements Listener {
                 event.setCancelled(true);
                 Plugin plugin = this.plugin;
                 if (removeableIcons[slot]) {
-                    event.setCursor(optionIcons[slot]);
-                }
-                OptionClickEvent e = new OptionClickEvent((Player) event.getWhoClicked(), slot, optionNames[slot], optionIcons[slot]);
-                handler.onOptionClick(e);
-                ((Player) event.getWhoClicked()).updateInventory();
-                if (e.willClose()) {
-                    ((Player) event.getWhoClicked()).closeInventory();
-                }
-                if (e.willDestroy()) {
-                    destroy();
+                    OptionClickEvent e = new RemoveableOptionClickEvent((Player) event.getWhoClicked(), slot, optionNames[slot], optionIcons[slot]);
+                    handler.onOptionClick(e);
+                    event.setCursor(((RemoveableOptionClickEvent) e).getCursor());
+                    if (e.willClose()) {
+                        ((Player) event.getWhoClicked()).closeInventory();
+                    }
+                    if (e.willDestroy()) {
+                        destroy();
+                    }
+                } else {
+                    OptionClickEvent e = new OptionClickEvent((Player) event.getWhoClicked(), slot, optionNames[slot], optionIcons[slot]);
+                    handler.onOptionClick(e);
+                    ((Player) event.getWhoClicked()).updateInventory();
+                    if (e.willClose()) {
+                        ((Player) event.getWhoClicked()).closeInventory();
+                    }
+                    if (e.willDestroy()) {
+                        destroy();
+                    }
                 }
             }
         }
@@ -128,6 +138,25 @@ public class IconMenu implements Listener {
 
     public interface OptionClickEventHandler {
         public void onOptionClick(OptionClickEvent event);
+    }
+
+    public class RemoveableOptionClickEvent extends OptionClickEvent {
+
+        private ItemStack cursor;
+
+        public RemoveableOptionClickEvent(Player player, int position, String name, ItemStack item) {
+            super(player, position, name, item);
+            this.cursor = item;
+        }
+
+        public void setCursor(ItemStack item) {
+            this.cursor = item;
+        }
+
+        public ItemStack getCursor() {
+            return this.cursor;
+        }
+
     }
 
     public class OptionClickEvent {

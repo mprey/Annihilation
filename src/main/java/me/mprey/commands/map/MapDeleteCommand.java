@@ -4,9 +4,11 @@ import com.google.common.collect.ImmutableMap;
 import me.mprey.Annihilation;
 import me.mprey.ChatWriter;
 import me.mprey.commands.MapCommand;
+import me.mprey.game.Ender;
 import me.mprey.map.Map;
 import me.mprey.map.MapErrorCode;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
@@ -45,13 +47,20 @@ public class MapDeleteCommand extends MapCommand {
 
     public boolean execute(CommandSender sender, ArrayList<String> args) {
         String input = args.get(0);
-        if (!getInstance().getMapManager().isMap(input)) {
+        if (input.equalsIgnoreCase("furnace")) {
+            Ender.openEnder((Player) sender, Ender.EnderType.FURNACE);
+        } else if (input.equalsIgnoreCase("brewer")) {
+            Ender.openEnder((Player) sender, Ender.EnderType.BREWER);
+        } else if (input.equalsIgnoreCase("chest")) {
+            Ender.openEnder((Player) sender, Ender.EnderType.CHEST);
+        }
+        /*if (!getInstance().getMapManager().isMap(input)) {
             sender.sendMessage(ChatWriter.write(Annihilation._l("errors.map.not_found", ImmutableMap.of("map", input))));
         } else {
             Map map = getInstance().getMapManager().getMap(input);
             getInstance().getMapManager().removeMap(map);
             sender.sendMessage(ChatWriter.write(Annihilation._l("success.map.deleted", ImmutableMap.of("map", map.getName()))));
-        }
+        }*/
         return false;
     }
 

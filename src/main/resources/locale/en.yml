@@ -79,9 +79,15 @@ game:
   yellow_color: 'Yellow'
   green_color: 'Green'
   ender:
-    furnace: 'enderfurnace'
-    chest: 'enderchest'
-    brewer: 'enderbrewer'
+    furnace:
+      name: 'enderfurnace'
+      info_msg: '&pThis is the team ender furnace. Smelt safely from teammates and enemies.'
+    chest:
+      name: 'enderchest'
+      info_msg: '&pThis is the team ender chest. Store items safely from teammates and enemies.'
+    brewer:
+      name: 'enderbrewer'
+      info_msg: '&pThis is the team ender brewer. Brew safely from teammates and enemies.'
 
 editor:
   main:
@@ -152,7 +158,7 @@ editor:
     confirm_red: # LORE NOT AVAILABE TO CHANGE
       name: '&cCANCEL'
     spawn_block:
-      name: '$team$ Spawn Block'
+      name: '&aSpawn Block'
       lore:
         - ''
         - '&fClick here to take a spawn block.'
@@ -175,6 +181,8 @@ editor:
         - '&adiamonds with the block to'
         - '&asave the location of the diamond.'
         - ''
+        - '&cDo not forget to save the map once completed.'
+        - ''
     ender_block:
       name: '$type$ Block'
       lore:
@@ -185,6 +193,9 @@ editor:
         - '&aleft-click on the same block'
         - '&atype on the map to create a '
         - '&aa new ender block of that type.'
+        - ''
+        - ''
+        - '&cDo not forget to save the map once completed.'
         - ''
     teleport_icon:
       name: '&aTeleport to World'
@@ -228,6 +239,19 @@ editor:
       lore:
         - ''
         - '&fClick here to edit the lobby.'
+        - ''
+    region_wand:
+      name: '&aNexus Region Wand'
+      lore:
+        - ''
+        - '&fClick here to take the nexus region wand.'
+        - ''
+        - '&aTo use the region-wand,'
+        - '&aleft-click to set the minimum point'
+        - '&aand right-click to set the maximum point.'
+        - ''
+        - ''
+        - '&cDo not forget to save the map once completed.'
         - ''
 confirm:
   save_map: 'Are you sure you want to save map $map$?'

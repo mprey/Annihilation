@@ -1,8 +1,10 @@
 package me.mprey.map;
 
 import me.mprey.Annihilation;
+import me.mprey.game.TeamColor;
 import me.mprey.game.TeamLocation;
 import me.mprey.util.ConfigUtil;
+import me.mprey.util.WorldUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -23,12 +25,12 @@ public class Map implements ConfigurationSerializable {
     private String name;
     private World world;
     private TeamLocation green, yellow, red, blue;
-    private Location lobby;
     private List<Location> diamonds;
 
-    public Map(String name, Location lobby, TeamLocation red, TeamLocation green, TeamLocation yellow, TeamLocation blue, List<Location> diamonds) {
+    //TODO add bosses
+
+    public Map(String name, TeamLocation red, TeamLocation green, TeamLocation yellow, TeamLocation blue, List<Location> diamonds) {
         this.name = name;
-        this.lobby = lobby;
         this.red = red;
         this.green = green;
         this.yellow = yellow;
@@ -42,7 +44,6 @@ public class Map implements ConfigurationSerializable {
 
     public Map(FileConfiguration config) throws Exception {
         this.name = config.getString("name");
-        this.lobby = ConfigUtil.deserializeLocation(config.get("lobby"));
         this.red = new TeamLocation(config.getConfigurationSection("team_red").getValues(false));
         this.yellow = new TeamLocation(config.getConfigurationSection("team_yellow").getValues(false));
         this.green = new TeamLocation(config.getConfigurationSection("team_green").getValues(false));
@@ -67,6 +68,21 @@ public class Map implements ConfigurationSerializable {
 
     public void addDiamond(Location location) {
         getDiamonds().add(location);
+    }
+
+    public TeamLocation getTeamLocation(TeamColor color) {
+        switch (color) {
+            case RED:
+                return getRedTeamLocation();
+            case BLUE:
+                return getBlueTeamLocation();
+            case GREEN:
+                return getGreenTeamLocation();
+            case YELLOW:
+                return getYellowTeamLocation();
+            default:
+                return getRedTeamLocation(); //????
+        }
     }
 
     public TeamLocation getBlueTeamLocation() {
@@ -105,26 +121,45 @@ public class Map implements ConfigurationSerializable {
     }
 
     public boolean isWorldCopied() {
-        return Bukkit.getServer().getWorld(this.name) != null;
+        return Annihilation.getInstance().getServer().getWorld(this.name) != null;
+    }
+
+    public boolean isWorldLoaded() {
+        for (World world : Annihilation.getInstance().getServer().getWorlds()) {
+            if (world.getName().equals(getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void copyWorld() {
+        File sourceFile = new File(Annihilation.getInstance().getDataFolder() + File.separator + MapManager.MAP_DIR, getName());
+        File targetFile = new File(Annihilation.getInstance().getServer().getWorldContainer().getAbsolutePath(), getName());
+
+        if (targetFile.isDirectory()) {
+            if (targetFile.list().length > 0) {
+                WorldUtil.deleteWorld(getName());
+            }
+        }
+
+        WorldUtil.copyWorld(sourceFile, targetFile);
+        if (!WorldUtil.loadWorld(getName())) {
+            //TODO log failure to create world
+            Annihilation.getInstance().getLogger().info("FAILURE TO LOAD WORLD!");
+        }
     }
 
     public void loadWorld() {
-        this.world = Bukkit.getServer().getWorld(name);
-    }
-
-    public Location getLobby() {
-        return lobby;
-    }
-
-    public void setLobby(Location location) {
-        this.lobby = location;
+        if (!isWorldLoaded()) {
+            copyWorld();
+        }
+        this.world = Annihilation.getInstance().getServer().getWorld(getName());
     }
 
     public MapErrorCode checkMap() {
         if (getName() == null || getName().isEmpty()) {
             return MapErrorCode.MAP_NAME_NULL;
-        } else if (getLobby() == null) {
-            return MapErrorCode.MAP_LOBBY_NULL;
         } else if (!getRedTeamLocation().check()) {
             return MapErrorCode.RED_LOCATION_ERROR;
         } else if (!getBlueTeamLocation().check()) {
@@ -154,7 +189,7 @@ public class Map implements ConfigurationSerializable {
     }
 
     private void createConfig() {
-        FileConfiguration config = YamlConfiguration.loadConfiguration(Annihilation.getInstance().getMapManager().getMapFile(this));
+        FileConfiguration config = YamlConfiguration.loadConfiguration(Annihilation.getInstance().getMapManager().getMapFile(this.getName()));
         if (config == null) {
             return;
         }
@@ -171,7 +206,6 @@ public class Map implements ConfigurationSerializable {
         java.util.Map<String, Object> serialize = new HashMap<>();
 
         serialize.put("name", getName());
-        serialize.put("lobby", ConfigUtil.serializeLocation(getLobby()));
         serialize.put("team_red", getRedTeamLocation().serialize());
         serialize.put("team_blue", getBlueTeamLocation().serialize());
         serialize.put("team_green", getGreenTeamLocation().serialize());

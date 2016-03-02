@@ -7,9 +7,14 @@ import me.mprey.game.TeamColor;
 import me.mprey.map.Map;
 import me.mprey.util.IconMenu;
 import me.mprey.util.ItemUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -32,6 +37,8 @@ public class MapEditor extends IconGUI {
     //SLOT 41 - save map
     //SLOT 42 - delete map
 
+    //TODO add icon to edit the map
+
     public IconMenu createMenu() {
         return new IconMenu(getName(), getSize(), new IconMenu.OptionClickEventHandler() {
 
@@ -40,11 +47,26 @@ public class MapEditor extends IconGUI {
                 if (event.getPosition() == 45) {
                     new MapsEditor(getUser()).openGUI();
                 } else if (event.getPosition() == 2) {
-                    //TODO load world of map if not loaded
+                    if (!map.isWorldLoaded()) {
+                        map.loadWorld();
+                        getUser().sendMessage("world loaded");
+                        //TODO tell player the world has been loaded
+                    } else {
+                        getUser().sendMessage("world already loaded.");
+                        //TODO tell player the world was already loaded
+                    }
+                    event.setWillClose(true);
                 } else if (event.getPosition() == 6) {
-                    //TODO check if loaded, if so teleport to world
+                    if (map.isWorldLoaded()) {
+                        getUser().teleport(map.getWorld().getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                        //TODO tell the player they teleported
+                    } else {
+                        getUser().sendMessage("world is not loaded.");
+                        //TODO tell player world is not loaded
+                    }
+                    event.setWillClose(true);
                 } else if (event.getPosition() == 38) {
-                    //TODO open lobby editor
+                    new LobbyEditor(getUser()).openGUI();
                 } else if (event.getPosition() == 41) {
                     new Confirmation(getUser(), Annihilation._l("confirm.save_map", ImmutableMap.of("map", map.getName())), "anni map save " + map.getName(), new MapEditor(getUser(), map)).openGUI();
                 } else if (event.getPosition() == 42) {
@@ -57,6 +79,10 @@ public class MapEditor extends IconGUI {
                     new TeamEditor(getUser(), map, TeamColor.RED).openGUI();
                 } else if (event.getPosition() == 25) {
                     new TeamEditor(getUser(), map, TeamColor.BLUE).openGUI();
+                } else if (event instanceof IconMenu.RemoveableOptionClickEvent) {
+                    IconMenu.RemoveableOptionClickEvent re = (IconMenu.RemoveableOptionClickEvent) event;
+                    ItemStack cursor = ItemUtil.addData(ItemUtil.nameAndLore(Material.DIAMOND_ORE, Annihilation._l("editor.icons.diamond_icon.name"), Annihilation._ls("editor.icons.diamond_icon.lore")), ImmutableMap.of("map", map.getName()));
+                    re.setCursor(cursor);
                 }
             }
 

@@ -14,19 +14,25 @@ import org.bukkit.scoreboard.Team;
  */
 public enum TeamColor {
 
-    YELLOW(Color.fromRGB(255, 255, 85), ChatColor.YELLOW, DyeColor.YELLOW),
-    RED(Color.fromRGB(255, 85, 85), ChatColor.RED, DyeColor.RED),
-    BLUE(Color.fromRGB(85, 85, 255), ChatColor.BLUE, DyeColor.BLUE),
-    GREEN(Color.fromRGB(85, 255, 85), ChatColor.GREEN, DyeColor.GREEN);
+    YELLOW(Color.fromRGB(255, 255, 85), ChatColor.YELLOW, DyeColor.YELLOW, (byte) 4),
+    RED(Color.fromRGB(255, 85, 85), ChatColor.RED, DyeColor.RED, (byte) 14),
+    BLUE(Color.fromRGB(85, 85, 255), ChatColor.BLUE, DyeColor.BLUE, (byte) 11),
+    GREEN(Color.fromRGB(85, 255, 85), ChatColor.GREEN, DyeColor.GREEN, (byte) 13);
 
     private Color color;
     private ChatColor chatColor;
     private DyeColor dyeColor;
+    private byte colorData;
 
-    TeamColor(Color color, ChatColor chatColor, DyeColor dyeColor) {
+    TeamColor(Color color, ChatColor chatColor, DyeColor dyeColor, byte colorData) {
         this.color = color;
         this.chatColor = chatColor;
         this.dyeColor = dyeColor;
+        this.colorData = colorData;
+    }
+
+    public byte getColorData() {
+        return  colorData;
     }
 
     public Color getColor() {

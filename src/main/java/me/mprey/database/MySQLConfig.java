@@ -11,6 +11,8 @@ public class MySQLConfig {
 
     private long connectionTimeout;
 
+    //TODO make class compatible with /anni reload
+
     public MySQLConfig(String host, String user, String password, String database, long connectionTimeout, int port, int minConnections, int maxConnections) {
         this.host = host;
         this.connectionTimeout = connectionTimeout;
@@ -25,7 +27,6 @@ public class MySQLConfig {
     public long getConnectionTimeout() {
         return connectionTimeout;
     }
-
 
     public String getHost() {
         return host;

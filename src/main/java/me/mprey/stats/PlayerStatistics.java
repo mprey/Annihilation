@@ -185,13 +185,13 @@ public class PlayerStatistics extends Statistics {
     }
 
     public void copyDefaults(FileConfiguration config) {
-        config.addDefault("kills", this.kills);
-        config.addDefault("deaths", this.deaths);
-        config.addDefault("nexus_kills", this.nexusKills);
-        config.addDefault("nexus_damage", this.nexusDamage);
-        config.addDefault("games_played", this.gamesPlayed);
-        config.addDefault("wins", this.wins);
-        config.addDefault("losses", this.losses);
+        config.set("kills", this.kills);
+        config.set("deaths", this.deaths);
+        config.set("nexus_kills", this.nexusKills);
+        config.set("nexus_damage", this.nexusDamage);
+        config.set("games_played", this.gamesPlayed);
+        config.set("wins", this.wins);
+        config.set("losses", this.losses);
     }
 
     public void updateYAML(FileConfiguration config) {

@@ -25,6 +25,7 @@ public class YamlManager {
     public YamlManager() {
         this.mapDir = new File(Annihilation.getInstance().getDataFolder() + File.separator + YAML_DIR + File.separator + MAPS_DIR);
         this.playerDir = new File(Annihilation.getInstance().getDataFolder() + File.separator + YAML_DIR + File.separator + PLAYERS_DIR);
+        init();
     }
 
     public void init() {
@@ -52,12 +53,12 @@ public class YamlManager {
 
     public void newEntry(Statistics stats) {
         File file = getFile(stats);
-        file.mkdirs();
         if (!file.exists()) {
             try {
                 file.createNewFile();
-                stats.copyDefaults(YamlConfiguration.loadConfiguration(file));
-                save(stats);
+                FileConfiguration config = getConfiguration(stats);
+                stats.copyDefaults(config);
+                save(stats, config);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -65,18 +66,19 @@ public class YamlManager {
     }
 
     public void updateStatistics(Statistics stats) {
-        stats.updateWithConfig(YamlConfiguration.loadConfiguration(getFile(stats)));
-        save(stats);
+        FileConfiguration config = getConfiguration(stats);
+        stats.updateWithConfig(config);
+        save(stats, config);
     }
 
     public void loadStatistics(Statistics stats) {
         stats.updateWithConfig(YamlConfiguration.loadConfiguration(getFile(stats)));
     }
 
-    public void save(Statistics stats) {
+    public void save(Statistics stats, FileConfiguration config) {
         File statsFile = getFile(stats);
         try {
-            YamlConfiguration.loadConfiguration(statsFile).save(statsFile);
+            config.save(statsFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -84,6 +86,10 @@ public class YamlManager {
 
     private File getFile(Statistics stats) {
         return new File(Annihilation.getInstance().getDataFolder() + File.separator + YAML_DIR + File.separator + stats.getYAMLDir() + File.separator + stats.getKeyValue() + ".yml");
+    }
+
+    private FileConfiguration getConfiguration(Statistics stats) {
+        return YamlConfiguration.loadConfiguration(getFile(stats));
     }
 
 }

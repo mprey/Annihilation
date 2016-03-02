@@ -16,12 +16,14 @@ public abstract class IconGUI {
 
     private IconMenu menu;
 
-    private ItemStack returnIcon;
+    private ItemStack returnIcon, regionWand;
 
     public IconGUI(Player player) {
         this.player = player;
         this.returnIcon = ItemUtil.nameAndLore(new ItemStack(Material.WOOD_DOOR),
                 Annihilation._l("editor.icons.return_icon.name"), Annihilation._ls("editor.icons.return_icon.lore"));
+        this.regionWand = ItemUtil.nameAndLore(new ItemStack(Material.WOOD_AXE), Annihilation._l("editor.icons.region_wand.name"),
+                Annihilation._ls("editor.icons.region_wand.lore"));
     }
 
     public Player getUser() {
@@ -41,6 +43,10 @@ public abstract class IconGUI {
 
     public ItemStack getReturnIcon() {
         return this.returnIcon;
+    }
+
+    public ItemStack getRegionWand() {
+        return this.regionWand;
     }
 
     public abstract IconMenu createMenu();

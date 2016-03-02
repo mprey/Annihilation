@@ -13,13 +13,24 @@ public class LobbyEditor extends IconGUI {
         super(player);
     }
 
+    //signs editor (red, blue, green, yellow)
+    //inventory editor
+    //load lobby world
+    //teleport to lobby world
+    //save map to file
+
     public IconMenu createMenu() {
         return new IconMenu(getName(), getSize(), new IconMenu.OptionClickEventHandler() {
-            @Override
-            public void onOptionClick(IconMenu.OptionClickEvent event) {
 
+            public void onOptionClick(IconMenu.OptionClickEvent event) {
+                event.setWillClose(false);
+                if (event.getPosition() == 45) {
+                    new MainEditor(getUser()).openGUI();
+                }
             }
-        }, Annihilation.getInstance());
+
+        }, Annihilation.getInstance())
+                .setOption(45, getReturnIcon());
     }
 
     public int getSize() {

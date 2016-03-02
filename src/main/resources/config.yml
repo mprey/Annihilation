@@ -88,7 +88,7 @@ regen_blocks:
 
             # Sound to be played when the block is mined
             # Enter 'NONE' if you want no sound to be played
-            sound: ORB_PICKUP
+            sound: ENTITY_EXPERIENCE_ORB_PICKUP
 
             # Custom effects played when the block is mined
             # Current list of effects:

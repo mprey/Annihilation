@@ -5,6 +5,7 @@ import me.mprey.database.MySQLManager;
 import me.mprey.database.YamlManager;
 import me.mprey.game.TeamColor;
 import me.mprey.map.Map;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -177,14 +178,14 @@ public class MapStatistics extends Statistics {
     }
 
     public void copyDefaults(FileConfiguration config) {
-        config.addDefault("games_played", this.gamesPlayed);
-        config.addDefault("total_deaths", this.totalDeaths);
-        config.addDefault("total_kills", this.totalKills);
-        config.addDefault("total_nexus_damage", this.totalNexusDamage);
-        config.addDefault("green_wins", this.greenVictories);
-        config.addDefault("blue_wins", this.blueVictories);
-        config.addDefault("red_wins", this.redVictories);
-        config.addDefault("yellow_wins", this.yellowVictories);
+        config.set("games_played", this.gamesPlayed);
+        config.set("total_deaths", this.totalDeaths);
+        config.set("total_kills", this.totalKills);
+        config.set("total_nexus_damage", this.totalNexusDamage);
+        config.set("green_wins", this.greenVictories);
+        config.set("blue_wins", this.blueVictories);
+        config.set("red_wins", this.redVictories);
+        config.set("yellow_wins", this.yellowVictories);
     }
 
     public void updateYAML(FileConfiguration config) {
