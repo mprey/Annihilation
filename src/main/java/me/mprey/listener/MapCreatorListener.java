@@ -2,6 +2,7 @@ package me.mprey.listener;
 
 import com.google.common.collect.ImmutableMap;
 import me.mprey.Annihilation;
+import me.mprey.ChatWriter;
 import me.mprey.game.Ender;
 import me.mprey.game.TeamColor;
 import me.mprey.map.Map;
@@ -25,7 +26,22 @@ public class MapCreatorListener extends BaseListener {
      */
     @EventHandler
     public void onPlaceChest(PlayerInteractEvent event) {
-
+        if (event.getClickedBlock() != null) {
+            ItemStack im = event.getItem();
+            if (im != null && im.getType() == Material.CHEST && im.hasItemMeta() && im.getItemMeta().getDisplayName().equals(Annihilation._l("editor.icons.endor_block", ImmutableMap.of("type", Ender.EnderType.CHEST.toString())))) {
+                if (event.getClickedBlock().getType() == Material.CHEST) {
+                    event.setCancelled(true);
+                    String mapKey = ItemUtil.getData(im, "map");
+                    TeamColor team = TeamColor.valueOf(ItemUtil.getData(im, "team").toUpperCase());
+                    Map map = Annihilation.getInstance().getMapManager().getMap(mapKey);
+                    if (map != null) {
+                        map.getTeamLocation(team).setEnderChest(event.getClickedBlock().getLocation());
+                    } else {
+                        event.getPlayer().sendMessage(ChatWriter.write(Annihilation._l("errors.not_found", ImmutableMap.of("map", mapKey))));
+                    }
+                }
+            }
+        }
     }
 
     /*
@@ -33,7 +49,22 @@ public class MapCreatorListener extends BaseListener {
      */
     @EventHandler
     public void onPlaceFurnace(PlayerInteractEvent event) {
-
+        if (event.getClickedBlock() != null) {
+            ItemStack im = event.getItem();
+            if (im != null && im.getType() == Material.FURNACE && im.hasItemMeta() && im.getItemMeta().getDisplayName().equals(Annihilation._l("editor.icons.endor_block", ImmutableMap.of("type", Ender.EnderType.FURNACE.toString())))) {
+                if (event.getClickedBlock().getType() == Material.FURNACE) {
+                    event.setCancelled(true);
+                    String mapKey = ItemUtil.getData(im, "map");
+                    TeamColor team = TeamColor.valueOf(ItemUtil.getData(im, "team").toUpperCase());
+                    Map map = Annihilation.getInstance().getMapManager().getMap(mapKey);
+                    if (map != null) {
+                        map.getTeamLocation(team).setEnderFurnace(event.getClickedBlock().getLocation());
+                    } else {
+                        event.getPlayer().sendMessage(ChatWriter.write(Annihilation._l("errors.not_found", ImmutableMap.of("map", mapKey))));
+                    }
+                }
+            }
+        }
     }
 
     /*
@@ -41,7 +72,22 @@ public class MapCreatorListener extends BaseListener {
      */
     @EventHandler
     public void onPlaceBrewer(PlayerInteractEvent event) {
-
+        if (event.getClickedBlock() != null) {
+            ItemStack im = event.getItem();
+            if (im != null && im.getType() == Material.BREWING_STAND_ITEM && im.hasItemMeta() && im.getItemMeta().getDisplayName().equals(Annihilation._l("editor.icons.endor_block", ImmutableMap.of("type", Ender.EnderType.BREWER.toString())))) {
+                if (event.getClickedBlock().getType() == Material.BREWING_STAND_ITEM) {
+                    event.setCancelled(true);
+                    String mapKey = ItemUtil.getData(im, "map");
+                    TeamColor team = TeamColor.valueOf(ItemUtil.getData(im, "team").toUpperCase());
+                    Map map = Annihilation.getInstance().getMapManager().getMap(mapKey);
+                    if (map != null) {
+                        map.getTeamLocation(team).setEnderBrewer(event.getClickedBlock().getLocation());
+                    } else {
+                        event.getPlayer().sendMessage(ChatWriter.write(Annihilation._l("errors.not_found", ImmutableMap.of("map", mapKey))));
+                    }
+                }
+            }
+        }
     }
 
     /*
@@ -59,7 +105,7 @@ public class MapCreatorListener extends BaseListener {
                 if (map != null) {
                     map.getTeamLocation(team).addSpawn(event.getBlockPlaced().getLocation());
                 } else {
-                    //TODO tell user no map
+                    event.getPlayer().sendMessage(ChatWriter.write(Annihilation._l("errors.not_found", ImmutableMap.of("map", mapKey))));
                 }
             }
         }
@@ -80,13 +126,13 @@ public class MapCreatorListener extends BaseListener {
                 if (map != null) {
                     if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                         map.getTeamLocation(team).getNexus().setMaxCorner(event.getClickedBlock().getLocation());
-                        event.getPlayer().sendMessage("set max corner");
+                        event.getPlayer().sendMessage(ChatWriter.write(Annihilation._l("success.map.set_max_corner")));
                     } else if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
                         map.getTeamLocation(team).getNexus().setMinCorner(event.getClickedBlock().getLocation());
-                        event.getPlayer().sendMessage("set min corner");
+                        event.getPlayer().sendMessage(ChatWriter.write(Annihilation._l("success.map.set_min_corner")));
                     }
                 } else {
-                    //TODO tell user no map
+                    event.getPlayer().sendMessage(ChatWriter.write(Annihilation._l("errors.not_found", ImmutableMap.of("map", mapKey))));
                 }
             }
         }
@@ -106,13 +152,10 @@ public class MapCreatorListener extends BaseListener {
                         Map map = Annihilation.getInstance().getMapManager().getMap(mapKey);
                         if (map != null) {
                             map.addDiamond(event.getClickedBlock().getLocation());
-                            event.getPlayer().sendMessage("added a diamond ore for map " + map.getName());
+                            event.getPlayer().sendMessage(ChatWriter.write(Annihilation._l("success.map.added_diamond", ImmutableMap.of("map", mapKey))));
                         } else {
-                            //TODO tell player theres an unknown map
+                            event.getPlayer().sendMessage(ChatWriter.write(Annihilation._l("errors.not_found", ImmutableMap.of("map", mapKey))));
                         }
-                    } else {
-                        //TODO tell user they have to left-click a diamond-ore
-                        event.getPlayer().sendMessage("not left-click diamond ore");
                     }
                     event.setCancelled(true);
                 }

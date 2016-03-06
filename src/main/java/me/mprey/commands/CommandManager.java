@@ -6,6 +6,7 @@ import me.mprey.ChatWriter;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +37,14 @@ public class CommandManager implements CommandExecutor {
             if (baseCommand.getCommand().equalsIgnoreCase(command)) {
                 if (baseCommand.getArguments() != null && baseCommand.getArguments().length > argList.size()) {
                     sender.sendMessage(ChatWriter.write(Annihilation._l("errors.commands.invalid_args", ImmutableMap.of("usage", baseCommand.getUsage()))));
+                    return false;
+                }
+                if (!baseCommand.consoleFriendly() && !(sender instanceof Player)) {
+                    sender.sendMessage(ChatWriter.write(Annihilation._l("errors.commands.no_console")));
+                    return false;
+                }
+                if (!sender.hasPermission(baseCommand.getPermission())) {
+                    sender.sendMessage(ChatWriter.write(Annihilation._l("errors.commands.no_permission")));
                     return false;
                 }
                 return baseCommand.execute(sender, argList);

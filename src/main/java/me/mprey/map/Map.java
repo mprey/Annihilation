@@ -157,6 +157,16 @@ public class Map implements ConfigurationSerializable {
         this.world = Annihilation.getInstance().getServer().getWorld(getName());
     }
 
+    public boolean saveWorldToFile() {
+        if (isWorldLoaded()) {
+            File sourceFile = new File(Annihilation.getInstance().getServer().getWorldContainer().getAbsolutePath(), getName());
+            File targetFile = new File(Annihilation.getInstance().getDataFolder() + File.separator + MapManager.MAP_DIR, getName());
+
+            //TODO
+        }
+        return false;
+    }
+
     public MapErrorCode checkMap() {
         if (getName() == null || getName().isEmpty()) {
             return MapErrorCode.MAP_NAME_NULL;

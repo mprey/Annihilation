@@ -25,10 +25,18 @@ public class MainEditor extends IconGUI {
                 if (event.getPosition() == 0) {
                     new SettingsEditor(getUser()).openGUI();
                 } else if (event.getPosition() == 4) {
-                    getUser().sendMessage("opening lobby editor!");
-                    event.setWillClose(true);
+                    if (Annihilation.getInstance().getMapManager().lobbyLoaded()) {
+                        new LobbyEditor(getUser()).openGUI();
+                    } else {
+                        new LobbyCreator(getUser()).openGUI();
+                    }
                 } else if (event.getPosition() == 8) {
-                    new MapsEditor(getUser()).openGUI();
+                    if (Annihilation.getInstance().getMapManager().lobbyLoaded()){
+                        new MapsEditor(getUser()).openGUI();
+                    } else {
+                        getUser().sendMessage(ChatWriter.write(Annihilation._l("errors.lobby.not_loaded")));
+                        event.setWillClose(true);
+                    }
                 }
             }
         }, Annihilation.getInstance());

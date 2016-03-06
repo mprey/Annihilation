@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -24,12 +25,18 @@ import java.util.List;
  */
 public class MapManager {
 
-    public static final String MAP_DIR = "maps", MAP_FILE = "map.yml";
+    public static final String MAP_DIR = "maps", MAP_FILE = "map.yml", LOBBY_FILE = "lobby.yml";
 
     private ArrayList<Map> mapList;
 
+    private Lobby lobby;
+
     public MapManager() {
         this.mapList = new ArrayList<>();
+    }
+
+    public Lobby getLobby() {
+        return this.lobby;
     }
 
     private void loadMap(String mapName) {
@@ -61,6 +68,29 @@ public class MapManager {
         }
     }
 
+    private boolean loadLobby(File directory) {
+        File lobbyFile = new File(directory, LOBBY_FILE);
+        if (lobbyFile != null && lobbyFile.exists()) {
+            this.lobby = new Lobby(YamlConfiguration.loadConfiguration(lobbyFile));
+            return true;
+        }
+        return false;
+    }
+
+    public boolean lobbyMapExists() {
+        return getMapDirectory("lobby").exists();
+    }
+
+    public boolean createLobbyFromFile() {
+        this.lobby = new Lobby();
+        this.lobby.getWorld();
+        return this.lobby.isWorldLoaded();
+    }
+
+    public void createBlankLobby() {
+        this.lobby = new Lobby(WorldUtil.createEmptyWorld("lobby"));
+    }
+
     public void loadMaps() {
         File mapsDirectory = new File(Annihilation.getInstance().getDataFolder() + File.separator + MAP_DIR);
         if (!mapsDirectory.exists()) {
@@ -76,11 +106,17 @@ public class MapManager {
             for (File mapDirectory : subFiles) {
                 if (isMapDir(mapDirectory)) {
                     loadMap(mapDirectory.getName());
+                } else if (isLobbyDir(mapDirectory)) {
+                    loadLobby(mapDirectory);
                 }
             }
         } else {
             Annihilation.getInstance().getLogger().info(Annihilation._l("errors.map.no_maps"));
         }
+    }
+
+    public boolean lobbyLoaded() {
+        return this.lobby != null;
     }
 
     public boolean addMap(String map) {
@@ -146,10 +182,21 @@ public class MapManager {
         return available;
     }
 
-    public boolean isMapDir(File file) {
+    private boolean isMapDir(File file) {
         if (file.exists() && file.isDirectory()) {
             for (File cfg : file.listFiles()) {
                 if (cfg.isFile() && cfg.getName().equals(MAP_FILE)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isLobbyDir(File file) {
+        if (file.exists() && file.isDirectory()) {
+            for (File cfg : file.listFiles()) {
+                if (cfg.isFile() && cfg.getName().equals(LOBBY_FILE)) {
                     return true;
                 }
             }

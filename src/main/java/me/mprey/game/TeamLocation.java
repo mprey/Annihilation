@@ -51,12 +51,24 @@ public class TeamLocation implements ConfigurationSerializable {
         return enderChest;
     }
 
+    public void setEnderChest(Location loc) {
+        this.enderChest = loc;
+    }
+
     public Location getEnderBrewer() {
         return enderBrewer;
     }
 
+    public void setEnderBrewer(Location loc) {
+        this.enderBrewer = loc;
+    }
+
     public Location getEnderFurnace() {
         return enderFurnace;
+    }
+
+    public void setEnderFurnace(Location loc) {
+        this.enderFurnace = loc;
     }
 
     public List<Location> getSpawns() {
