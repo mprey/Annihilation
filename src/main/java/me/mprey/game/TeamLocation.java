@@ -3,6 +3,10 @@ package me.mprey.game;
 import me.mprey.map.Region;
 import me.mprey.util.ConfigUtil;
 import me.mprey.util.GameUtil;
+import me.mprey.util.Utils;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
@@ -79,7 +83,9 @@ public class TeamLocation implements ConfigurationSerializable {
     }
 
     public void addSpawn(Location location) {
-        getSpawns().add(location);
+        if (!Utils.containsLocation(getSpawns(), location)) {
+            getSpawns().add(location);
+        }
     }
 
     public boolean check() {
@@ -90,8 +96,12 @@ public class TeamLocation implements ConfigurationSerializable {
                 getEnderChest() != null;
     }
 
-    public String toString() {
-        return "{nexus_region=" + getNexus().toString() + ", spawns=" + GameUtil.arrayToString(getSpawns()) + ", ender_furnace=" + GameUtil.locationToString(enderFurnace) + ", ender_brewer=" + GameUtil.locationToString(enderBrewer) + ", ender_chest=" + GameUtil.locationToString(enderChest) + "}";
+    public BaseComponent[] getComponents() {
+        return new ComponentBuilder("region=").color(ChatColor.WHITE).bold(true).append(getNexus().toString()).append("\n" + "spawns=").color(ChatColor.WHITE).bold(true).append(GameUtil.arrayToString(getSpawns(), true)).color(ChatColor.GREEN).bold(false)
+                .append("\n" + "ender_furnace=").color(ChatColor.WHITE).bold(true).append(GameUtil.locationToString(getEnderFurnace())).color(ChatColor.GREEN).bold(false)
+                .append("\n" + "ender_brewer=").color(ChatColor.WHITE).bold(true).append(GameUtil.locationToString(getEnderBrewer())).color(ChatColor.GREEN).bold(false)
+                .append("\n" + "ender_chest=").color(ChatColor.WHITE).bold(true).append(GameUtil.locationToString(getEnderChest())).color(ChatColor.GREEN).bold(false)
+                .create();
     }
 
     public Map<String, Object> serialize() {

@@ -4,7 +4,12 @@ import me.mprey.Annihilation;
 import me.mprey.game.TeamColor;
 import me.mprey.game.TeamLocation;
 import me.mprey.util.ConfigUtil;
+import me.mprey.util.GameUtil;
+import me.mprey.util.Utils;
 import me.mprey.util.WorldUtil;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -67,7 +72,9 @@ public class Map implements ConfigurationSerializable {
     }
 
     public void addDiamond(Location location) {
-        getDiamonds().add(location);
+        if (!Utils.containsLocation(getDiamonds(), location)) {
+            getDiamonds().add(location);
+        }
     }
 
     public TeamLocation getTeamLocation(TeamColor color) {
@@ -157,12 +164,15 @@ public class Map implements ConfigurationSerializable {
         this.world = Annihilation.getInstance().getServer().getWorld(getName());
     }
 
-    public boolean saveWorldToFile() {
+    public boolean saveWorld() {
         if (isWorldLoaded()) {
-            File sourceFile = new File(Annihilation.getInstance().getServer().getWorldContainer().getAbsolutePath(), getName());
-            File targetFile = new File(Annihilation.getInstance().getDataFolder() + File.separator + MapManager.MAP_DIR, getName());
+            this.world.save();
+            WorldUtil.deleteWorld(new File(Annihilation.getInstance().getDataFolder() + File.separator + MapManager.MAP_DIR + File.separator + getName()));
 
-            //TODO
+            File sourceFile = new File(Annihilation.getInstance().getServer().getWorldContainer().getAbsolutePath(), getName());
+            File targetFile = new File(Annihilation.getInstance().getDataFolder() + File.separator + MapManager.MAP_DIR + File.separator + getName());
+            WorldUtil.copyWorld(sourceFile, targetFile);
+            return true;
         }
         return false;
     }
@@ -186,16 +196,17 @@ public class Map implements ConfigurationSerializable {
         return checkMap() == MapErrorCode.OK;
     }
 
-    public void save() {
+    public boolean saveData() {
         File config = new File(Annihilation.getInstance().getDataFolder() + File.separator + MapManager.MAP_DIR + File.separator + this.name + File.separator + "game.yml");
         if (config == null) {
-            return;
+            return false;
         }
         config.mkdirs();
         if (config.exists()) {
             config.delete();
         }
         createConfig();
+        return true;
     }
 
     private void createConfig() {
@@ -210,6 +221,14 @@ public class Map implements ConfigurationSerializable {
 
     public boolean equals(Map other) {
         return name.equals(other);
+    }
+
+    public BaseComponent[] getWorldComponents() {
+        return new ComponentBuilder("loaded=").color(ChatColor.WHITE).bold(true).append("" + this.isWorldLoaded()).color(this.isWorldLoaded() ? ChatColor.GREEN : ChatColor.RED).bold(false).create();
+    }
+
+    public BaseComponent[] getDiamondsComponents() {
+        return new ComponentBuilder("diamond_list=").color(ChatColor.WHITE).bold(true).append(GameUtil.arrayToString(getDiamonds(), true)).color(ChatColor.GREEN).bold(false).create();
     }
 
     public java.util.Map<String, Object> serialize() {

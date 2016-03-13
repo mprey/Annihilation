@@ -88,7 +88,7 @@ public class LobbyEditor extends IconGUI {
                 .setOption(9, ItemUtil.nameAndLore(TeamColor.RED.getBlock(), TeamColor.RED.toString(), Arrays.asList("")))
                 .setOption(18, ItemUtil.nameAndLore(TeamColor.BLUE.getBlock(), TeamColor.BLUE.toString(), Arrays.asList("")))
                 .setOption(27, ItemUtil.nameAndLore(TeamColor.GREEN.getBlock(), TeamColor.GREEN.toString(), Arrays.asList("")))
-                .setOption(9, ItemUtil.nameAndLore(TeamColor.YELLOW.getBlock(), TeamColor.YELLOW.toString(), Arrays.asList("")))
+                .setOption(36, ItemUtil.nameAndLore(TeamColor.YELLOW.getBlock(), TeamColor.YELLOW.toString(), Arrays.asList("")))
                 .setRemoveableOption(10, ItemUtil.nameAndLore(Material.SIGN, Annihilation._l("editor.icons.team_sign.name"), Annihilation._ls("editor.icons.team_sign.lore")))
                 .setRemoveableOption(19, ItemUtil.nameAndLore(Material.SIGN, Annihilation._l("editor.icons.team_sign.name"), Annihilation._ls("editor.icons.team_sign.lore")))
                 .setRemoveableOption(28, ItemUtil.nameAndLore(Material.SIGN, Annihilation._l("editor.icons.team_sign.name"), Annihilation._ls("editor.icons.team_sign.lore")))

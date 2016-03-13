@@ -130,10 +130,11 @@ public class Lobby {
 
     public boolean saveWorld() {
         if (isWorldLoaded()) {
-            WorldUtil.deleteWorld(new File(Annihilation.getInstance().getDataFolder() + File.separator + MapManager.MAP_DIR + File.separator + "lobby"));
+            this.world.save();
+            WorldUtil.deleteWorld(new File(Annihilation.getInstance().getDataFolder() + File.separator + MapManager.MAP_DIR + File.separator + FILE_NAME));
 
-            File sourceFile = new File(Annihilation.getInstance().getServer().getWorldContainer().getAbsolutePath(), "lobby");
-            File targetFile = new File(Annihilation.getInstance().getDataFolder() + File.separator + MapManager.MAP_DIR + File.separator + "lobby");
+            File sourceFile = new File(Annihilation.getInstance().getServer().getWorldContainer().getAbsolutePath(), FILE_NAME);
+            File targetFile = new File(Annihilation.getInstance().getDataFolder() + File.separator + MapManager.MAP_DIR + File.separator + FILE_NAME);
             WorldUtil.copyWorld(sourceFile, targetFile);
             return true;
         }

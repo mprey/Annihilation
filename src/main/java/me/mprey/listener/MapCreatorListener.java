@@ -28,7 +28,7 @@ public class MapCreatorListener extends BaseListener {
     public void onPlaceChest(PlayerInteractEvent event) {
         if (event.getClickedBlock() != null) {
             ItemStack im = event.getItem();
-            if (im != null && im.getType() == Material.CHEST && im.hasItemMeta() && im.getItemMeta().getDisplayName().equals(Annihilation._l("editor.icons.endor_block", ImmutableMap.of("type", Ender.EnderType.CHEST.toString())))) {
+            if (im != null && im.getType() == Material.CHEST && im.hasItemMeta() && im.getItemMeta().getDisplayName().equals(Annihilation._l("editor.icons.ender_block", ImmutableMap.of("type", Ender.EnderType.CHEST.toString())))) {
                 if (event.getClickedBlock().getType() == Material.CHEST) {
                     event.setCancelled(true);
                     String mapKey = ItemUtil.getData(im, "map");
@@ -36,6 +36,7 @@ public class MapCreatorListener extends BaseListener {
                     Map map = Annihilation.getInstance().getMapManager().getMap(mapKey);
                     if (map != null) {
                         map.getTeamLocation(team).setEnderChest(event.getClickedBlock().getLocation());
+                        event.getPlayer().sendMessage(ChatWriter.write(Annihilation._l("success.map.set_ender_chest", ImmutableMap.of("map", mapKey, "team", team.toString()))));
                     } else {
                         event.getPlayer().sendMessage(ChatWriter.write(Annihilation._l("errors.not_found", ImmutableMap.of("map", mapKey))));
                     }
@@ -51,7 +52,7 @@ public class MapCreatorListener extends BaseListener {
     public void onPlaceFurnace(PlayerInteractEvent event) {
         if (event.getClickedBlock() != null) {
             ItemStack im = event.getItem();
-            if (im != null && im.getType() == Material.FURNACE && im.hasItemMeta() && im.getItemMeta().getDisplayName().equals(Annihilation._l("editor.icons.endor_block", ImmutableMap.of("type", Ender.EnderType.FURNACE.toString())))) {
+            if (im != null && im.getType() == Material.FURNACE && im.hasItemMeta() && im.getItemMeta().getDisplayName().equals(Annihilation._l("editor.icons.ender_block.name", ImmutableMap.of("type", Ender.EnderType.FURNACE.toString())))) {
                 if (event.getClickedBlock().getType() == Material.FURNACE) {
                     event.setCancelled(true);
                     String mapKey = ItemUtil.getData(im, "map");
@@ -59,6 +60,7 @@ public class MapCreatorListener extends BaseListener {
                     Map map = Annihilation.getInstance().getMapManager().getMap(mapKey);
                     if (map != null) {
                         map.getTeamLocation(team).setEnderFurnace(event.getClickedBlock().getLocation());
+                        event.getPlayer().sendMessage(ChatWriter.write(Annihilation._l("success.map.set_ender_furnace", ImmutableMap.of("map", mapKey, "team", team.toString()))));
                     } else {
                         event.getPlayer().sendMessage(ChatWriter.write(Annihilation._l("errors.not_found", ImmutableMap.of("map", mapKey))));
                     }
@@ -74,7 +76,7 @@ public class MapCreatorListener extends BaseListener {
     public void onPlaceBrewer(PlayerInteractEvent event) {
         if (event.getClickedBlock() != null) {
             ItemStack im = event.getItem();
-            if (im != null && im.getType() == Material.BREWING_STAND_ITEM && im.hasItemMeta() && im.getItemMeta().getDisplayName().equals(Annihilation._l("editor.icons.endor_block", ImmutableMap.of("type", Ender.EnderType.BREWER.toString())))) {
+            if (im != null && im.getType() == Material.BREWING_STAND_ITEM && im.hasItemMeta() && im.getItemMeta().getDisplayName().equals(Annihilation._l("editor.icons.ender_block.name", ImmutableMap.of("type", Ender.EnderType.BREWER.toString())))) {
                 if (event.getClickedBlock().getType() == Material.BREWING_STAND_ITEM) {
                     event.setCancelled(true);
                     String mapKey = ItemUtil.getData(im, "map");
@@ -82,6 +84,7 @@ public class MapCreatorListener extends BaseListener {
                     Map map = Annihilation.getInstance().getMapManager().getMap(mapKey);
                     if (map != null) {
                         map.getTeamLocation(team).setEnderBrewer(event.getClickedBlock().getLocation());
+                        event.getPlayer().sendMessage(ChatWriter.write(Annihilation._l("success.map.set_ender_brewer", ImmutableMap.of("map", mapKey, "team", team.toString()))));
                     } else {
                         event.getPlayer().sendMessage(ChatWriter.write(Annihilation._l("errors.not_found", ImmutableMap.of("map", mapKey))));
                     }
@@ -104,6 +107,7 @@ public class MapCreatorListener extends BaseListener {
                 Map map = Annihilation.getInstance().getMapManager().getMap(mapKey);
                 if (map != null) {
                     map.getTeamLocation(team).addSpawn(event.getBlockPlaced().getLocation());
+                    event.getPlayer().sendMessage(ChatWriter.write(Annihilation._l("success.map.added_spawn", ImmutableMap.of("map", mapKey, "team", team.toString()))));
                 } else {
                     event.getPlayer().sendMessage(ChatWriter.write(Annihilation._l("errors.not_found", ImmutableMap.of("map", mapKey))));
                 }
@@ -126,10 +130,10 @@ public class MapCreatorListener extends BaseListener {
                 if (map != null) {
                     if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                         map.getTeamLocation(team).getNexus().setMaxCorner(event.getClickedBlock().getLocation());
-                        event.getPlayer().sendMessage(ChatWriter.write(Annihilation._l("success.map.set_max_corner")));
+                        event.getPlayer().sendMessage(ChatWriter.write(Annihilation._l("success.map.set_max_point")));
                     } else if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
                         map.getTeamLocation(team).getNexus().setMinCorner(event.getClickedBlock().getLocation());
-                        event.getPlayer().sendMessage(ChatWriter.write(Annihilation._l("success.map.set_min_corner")));
+                        event.getPlayer().sendMessage(ChatWriter.write(Annihilation._l("success.map.set_min_point")));
                     }
                 } else {
                     event.getPlayer().sendMessage(ChatWriter.write(Annihilation._l("errors.not_found", ImmutableMap.of("map", mapKey))));

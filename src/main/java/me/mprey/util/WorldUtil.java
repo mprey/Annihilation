@@ -1,9 +1,11 @@
 package me.mprey.util;
 
 import me.mprey.Annihilation;
+import me.mprey.map.Lobby;
 import me.mprey.map.MapManager;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 
@@ -19,7 +21,7 @@ public class WorldUtil {
 
     public static void copyWorld(File source, File target) {
         try {
-            List<String> ignore = Arrays.asList("uid.dat", "session.dat", MapManager.MAP_FILE);
+            List<String> ignore = Arrays.asList("uid.dat", "session.dat", "playerdata", MapManager.LOBBY_FILE, MapManager.MAP_FILE);
             if (!ignore.contains(source.getName())) {
                 if (source.isDirectory()) {
                     if (!target.exists()) target.mkdirs();
@@ -51,123 +53,24 @@ public class WorldUtil {
         WorldCreator worldCreator = new WorldCreator(worldName);
         worldCreator.environment(World.Environment.NORMAL);
         worldCreator.generateStructures(false);
-        worldCreator.generator(new ChunkGenerator() {
-            @Override
-            public byte[] generate(World world, Random random, int x, int z) {
-                return super.generate(world, random, x, z);
-            }
-
-            @Override
-            public short[][] generateExtBlockSections(World world, Random random, int x, int z, BiomeGrid biomes) {
-                return super.generateExtBlockSections(world, random, x, z, biomes);
-            }
-
-            @Override
-            public byte[][] generateBlockSections(World world, Random random, int x, int z, BiomeGrid biomes) {
-                return super.generateBlockSections(world, random, x, z, biomes);
-            }
-
-            @Override
-            public ChunkData generateChunkData(World world, Random random, int x, int z, BiomeGrid biome) {
-                return super.generateChunkData(world, random, x, z, biome);
-            }
-
-            @Override
-            public boolean canSpawn(World world, int x, int z) {
-                return true;
-            }
-
-            @Override
-            public List<BlockPopulator> getDefaultPopulators(World world) {
-                return Arrays.asList(new BlockPopulator[0]);
-            }
-
-            @Override
-            public Location getFixedSpawnLocation(World world, Random random) {
-                return new Location(world, 0.0D, 64.0D, 0.0D);
-            }
-        });
-
-        World world = worldCreator.createWorld();
-        world.setDifficulty(Difficulty.NORMAL);
-        world.setSpawnFlags(true, true);
-        world.setPVP(!worldName.equals("lobby"));
-        world.setStorm(false);
-        world.setThundering(false);
-        world.setWeatherDuration(Integer.MAX_VALUE);
-        world.setAutoSave(false);
-        world.setKeepSpawnInMemory(false);
-        world.setTicksPerAnimalSpawns(1);
-        world.setTicksPerMonsterSpawns(1);
-
-        world.setGameRuleValue("doMobSpawning", "false");
-        world.setGameRuleValue("mobGriefing", "false");
-        world.setGameRuleValue("doFireTick", "false");
-        world.setGameRuleValue("showDeathMessages", "false");
+        worldCreator.generator(new VoidGenerator());
+        World world = prepareWorld(worldCreator.createWorld(), !worldName.equals(Lobby.FILE_NAME));
 
         Block b = world.getBlockAt(0, 20, 0);
         b.setType(Material.STONE);
+
+        world.setSpawnLocation(0, 22, 0);
 
         return world;
     }
 
     public static boolean loadWorld(String worldName) {
-        boolean isLobby = worldName.equalsIgnoreCase("lobby");
+        boolean isLobby = worldName.equalsIgnoreCase(Lobby.FILE_NAME);
 
         WorldCreator creator = new WorldCreator(worldName);
         creator.generateStructures(false);
-        creator.generator(new ChunkGenerator() {
-            @Override
-            public byte[] generate(World world, Random random, int x, int z) {
-                return super.generate(world, random, x, z);
-            }
-
-            @Override
-            public short[][] generateExtBlockSections(World world, Random random, int x, int z, BiomeGrid biomes) {
-                return super.generateExtBlockSections(world, random, x, z, biomes);
-            }
-
-            @Override
-            public byte[][] generateBlockSections(World world, Random random, int x, int z, BiomeGrid biomes) {
-                return super.generateBlockSections(world, random, x, z, biomes);
-            }
-
-            @Override
-            public ChunkData generateChunkData(World world, Random random, int x, int z, BiomeGrid biome) {
-                return super.generateChunkData(world, random, x, z, biome);
-            }
-
-            @Override
-            public boolean canSpawn(World world, int x, int z) {
-                return true;
-            }
-
-            @Override
-            public List<BlockPopulator> getDefaultPopulators(World world) {
-                return Arrays.asList(new BlockPopulator[0]);
-            }
-
-            @Override
-            public Location getFixedSpawnLocation(World world, Random random) {
-                return new Location(world, 0.0D, 64.0D, 0.0D);
-            }
-        });
-
-        World world = creator.createWorld();
-        world.setDifficulty(Difficulty.NORMAL);
-        world.setSpawnFlags(true, true);
-        world.setPVP(!isLobby);
-        world.setWeatherDuration(Integer.MAX_VALUE);
-        world.setStorm(false);
-        world.setThundering(false);
-        world.setKeepSpawnInMemory(false);
-        world.setTicksPerAnimalSpawns(1);
-        world.setTicksPerMonsterSpawns(1);
-
-        world.setGameRuleValue("doMobSpawning", "false");
-        world.setGameRuleValue("mobGriefing", "false");
-        world.setGameRuleValue("doFireTick", "false");
-        world.setGameRuleValue("showDeathMessages", "false");
+        creator.generator(new VoidGenerator());
+        World world = prepareWorld(creator.createWorld(), !isLobby);
 
         for (World world1 : Annihilation.getInstance().getServer().getWorlds()) {
             if (world1.getName().equals(world.getName())) {
@@ -175,6 +78,25 @@ public class WorldUtil {
             }
         }
         return false;
+    }
+
+    private static World prepareWorld(World world, boolean pvp) {
+        world.setDifficulty(Difficulty.NORMAL);
+        world.setSpawnFlags(true, true);
+        world.setPVP(pvp);
+        world.setWeatherDuration(Integer.MAX_VALUE);
+        world.setStorm(false);
+        world.setThundering(false);
+        world.setKeepSpawnInMemory(false);
+        world.setTicksPerAnimalSpawns(1);
+        world.setTicksPerMonsterSpawns(1);
+
+        world.setGameRuleValue("doMobSpawning", "false");
+        world.setGameRuleValue("mobGriefing", "false");
+        world.setGameRuleValue("doFireTick", "false");
+        world.setGameRuleValue("showDeathMessages", "false");
+
+        return world;
     }
 
     public static boolean deleteWorld(File file) {
@@ -195,6 +117,9 @@ public class WorldUtil {
     public static void unloadWorld(String worldName) {
         World world = Annihilation.getInstance().getServer().getWorld(worldName);
         if (world != null) {
+            for (Player player : world.getPlayers()) {
+                player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+            }
             Annihilation.getInstance().getServer().unloadWorld(world, true);
         }
     }

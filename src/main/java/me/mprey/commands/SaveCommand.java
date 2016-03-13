@@ -13,29 +13,29 @@ import java.util.List;
 /**
  * Created by Mason Prey on 2/19/16.
  */
-public class MapCommand extends BaseCommand {
+public class SaveCommand extends BaseCommand {
 
     private List<BaseCommand> childCommands;
 
-    public MapCommand(Annihilation instance, BaseCommand... children) {
+    public SaveCommand(Annihilation instance, BaseCommand... children) {
         super(instance);
         this.childCommands = Arrays.asList(children);
     }
 
     public String getCommand() {
-        return "map";
+        return "save";
     }
 
     public String getPermission() {
-        return "map";
+        return "save";
     }
 
     public String getName() {
-        return Annihilation._l("commands.map.name");
+        return Annihilation._l("commands.save.name");
     }
 
     public String getDescription() {
-        return Annihilation._l("commands.map.description");
+        return Annihilation._l("commands.save.description");
     }
 
     public String[] getArguments() {
@@ -47,7 +47,7 @@ public class MapCommand extends BaseCommand {
     }
 
     public String getUsage() {
-        return Annihilation._l("commands.map.usage");
+        return Annihilation._l("commands.save.usage");
     }
 
     public List<BaseCommand> getChildren() {

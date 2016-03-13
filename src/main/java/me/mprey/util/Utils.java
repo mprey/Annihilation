@@ -11,10 +11,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -38,6 +35,15 @@ public class Utils {
             return false;
         }
         return true;
+    }
+
+    public static boolean containsLocation(List<Location> locationList, Location input) {
+        for (Location location : locationList) {
+            if (location.getBlockX() == input.getBlockX() && location.getBlockY() == input.getBlockY() && location.getBlockZ() == input.getBlockZ() && location.getWorld().getName().equals(input.getWorld().getName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static int[] interpretRange(String input) {

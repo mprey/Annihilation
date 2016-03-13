@@ -1,7 +1,7 @@
-name: Annihilation
-author: mprey
-version: 1.0.0
-website: http://mprey.me
+name: ${project.name}
+author: [mprey]
+version: ${project.version}
+website: ${project.url}
 main: me.mprey.Annihilation
 commands:
   annihilation:

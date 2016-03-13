@@ -1,11 +1,12 @@
 package me.mprey;
 
 import com.google.common.collect.ImmutableMap;
+import me.mprey.commands.CheckCommand;
 import me.mprey.commands.GUICommand;
-import me.mprey.commands.MapCommand;
+import me.mprey.commands.SaveCommand;
 import me.mprey.commands.CommandManager;
-import me.mprey.commands.map.MapDeleteCommand;
-import me.mprey.commands.map.MapSaveCommand;
+import me.mprey.commands.save.SaveDataCommand;
+import me.mprey.commands.save.SaveWorldCommand;
 import me.mprey.database.DatabaseManager;
 import me.mprey.game.Ender;
 import me.mprey.listener.MapCreatorListener;
@@ -49,7 +50,7 @@ public class Annihilation extends JavaPlugin {
 
         new Ender(this);
 
-        this.getCommand("annihilation").setExecutor(new CommandManager(new GUICommand(this), new MapCommand(this, new MapDeleteCommand(this), new MapSaveCommand(this))));
+        this.getCommand("annihilation").setExecutor(new CommandManager(new CheckCommand(this), new GUICommand(this), new SaveCommand(this, new SaveDataCommand(this), new SaveWorldCommand(this))));
 
         long endTime = System.currentTimeMillis();
         getLogger().info(_l("extra.enable_time", ImmutableMap.of("time", "" + (endTime - startTime))));
@@ -58,6 +59,8 @@ public class Annihilation extends JavaPlugin {
     public void onDisable() {
         regeneratingBlockManager.onDisable();
         databaseManager.onDisable();
+
+        this.mapManager.deleteLoadedWorlds();
     }
 
     public MapManager getMapManager() {

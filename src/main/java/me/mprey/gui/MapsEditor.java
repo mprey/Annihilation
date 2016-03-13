@@ -65,20 +65,11 @@ public class MapsEditor extends IconGUI {
                 break;
             }
 
-            ItemStack mapItem = new ItemStack(Material.MAP, slot);
+            ItemStack mapItem = new ItemStack(Material.MAP, 1);
             String name = (map.isValid() ? ChatColor.GREEN : ChatColor.RED) + "" + map.getName();
-            List<String> lore = Annihilation._ls("editor.icons.map_icon.lore",
-                    ImmutableMap.<String, String>builder()
-                    .put("world", map.isWorldCopied() + "")
-                    .put("green", map.getGreenTeamLocation().toString())
-                    .put("red", map.getRedTeamLocation().toString())
-                    .put("blue", map.getBlueTeamLocation().toString())
-                    .put("yellow", map.getYellowTeamLocation().toString())
-                    .put("diamonds", GameUtil.arrayToString(map.getDiamonds()))
-                    .build());
 
             mapSlots.put(slot, map);
-            menu.setOption(slot, mapItem, name, lore.toArray(new String[0]));
+            menu.setOption(slot, mapItem, name, new String[0]);
 
             slot++;
         }

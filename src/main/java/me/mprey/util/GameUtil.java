@@ -72,4 +72,12 @@ public class GameUtil {
         return helloItsMeIveBeenWonderingIfAfterAllTheseYearsYouWouldLikeToMeet(newArray);
     }
 
+    public static String arrayToString(List<Location> array, boolean appendLine) {
+        List<String> newArray = new ArrayList<>();
+        for (Location loc : array) {
+            newArray.add(locationToString(loc));
+        }
+        return helloItsMeIveBeenWonderingIfAfterAllTheseYearsYouWouldLikeToMeet(newArray);
+    }
+
 }

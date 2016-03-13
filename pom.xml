@@ -4,9 +4,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <name>Annihilation</name>
     <groupId>me.mprey</groupId>
     <artifactId>annihilation</artifactId>
-    <version>1.0</version>
+    <version>1.0.0</version>
+
+    <url>http://github.com/mprey/Annihilation</url>
+    <description>Four team multiplayer destroy the nexus gamemode</description>
+    <contributors>
+        <contributor>
+            <name>mprey</name>
+        </contributor>
+    </contributors>
 
     <dependencies>
         <dependency>
@@ -51,12 +60,14 @@
 
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>
+        <defaultGoal>clean package install</defaultGoal>
+        <finalName>${project.name}</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
+                <filtering>true</filtering>
                 <includes>
-                    <include>plugin.yml</include>
-                    <include>config.yml</include>
+                    <include>*.yml</include>
                     <include>locale/**/*.yml</include>
                 </includes>
             </resource>
@@ -68,21 +79,19 @@
                 <version>3.3</version>
             </plugin>
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>
-                                me.mprey.Annihilation
-                            </mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
 
 </project>

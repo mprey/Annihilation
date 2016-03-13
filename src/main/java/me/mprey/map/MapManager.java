@@ -83,12 +83,14 @@ public class MapManager {
 
     public boolean createLobbyFromFile() {
         this.lobby = new Lobby();
+        this.lobby.saveData();
         this.lobby.getWorld();
         return this.lobby.isWorldLoaded();
     }
 
     public void createBlankLobby() {
-        this.lobby = new Lobby(WorldUtil.createEmptyWorld("lobby"));
+        this.lobby = new Lobby(WorldUtil.createEmptyWorld(Lobby.FILE_NAME));
+        this.lobby.saveData();
     }
 
     public void loadMaps() {
@@ -115,6 +117,15 @@ public class MapManager {
         }
     }
 
+    public void deleteLoadedWorlds() {
+        for (Map map : this.getMapList()) {
+            WorldUtil.deleteWorld(map.getName());
+        }
+        if (lobbyLoaded()) {
+            WorldUtil.deleteWorld(Lobby.FILE_NAME);
+        }
+    }
+
     public boolean lobbyLoaded() {
         return this.lobby != null;
     }
@@ -135,15 +146,24 @@ public class MapManager {
         }
     }
 
-    public MapErrorCode saveMap(Map map) {
+    public MapErrorCode saveMapData(Map map) {
         if (map != null) {
             MapErrorCode code = map.checkMap();
             if (code == MapErrorCode.OK) {
-                map.save();
+                map.saveData();
                 MapStatistics.getStatistics(map);
-
             }
             return code;
+        }
+        return null;
+    }
+
+    public MapErrorCode saveMapWorld(Map map) {
+        if (map != null) {
+            if (!map.saveWorld()) {
+                return MapErrorCode.UNABLE_TO_SAVE_WORLD;
+            }
+            return MapErrorCode.OK;
         }
         return null;
     }
